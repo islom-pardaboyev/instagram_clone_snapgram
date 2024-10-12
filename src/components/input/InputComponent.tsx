@@ -7,7 +7,7 @@ const Input: FC<{ item: UserInfos }> = ({ item }) => {
   return (
     <label key={id} className="flex flex-col space-y-3">
       <span className="font-medium capitalize">{span_name}</span>
-      <input
+      <input required
         name={name}
         className="bg-dark-400 outline-none p-3 rounded"
         type={type}
