@@ -4,7 +4,6 @@ import BgImage from "../../../assets/images/bg_image.png";
 import { CreateNewUser, UserInfos } from "../../../types";
 import { FormEvent } from "react";
 import InputComponent from "../../../components/input/InputComponent";
-import axios from "axios";
 import { useCreateUserMutation } from "../../../redux/api/product-api";
 
 function SignUp() {
