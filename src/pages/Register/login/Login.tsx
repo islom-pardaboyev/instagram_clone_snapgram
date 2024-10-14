@@ -1,17 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleIcon, SnapgramIcon } from "../../../assets/images";
 import BgImage from "../../../assets/images/bg_image.png";
-import { UserInfos } from "../../../types";
-import { FormEvent } from "react";
+import { CreateNewUser, LoginUser, UserInfos } from "../../../types";
+import { FormEvent, useContext } from "react";
 import InputComponent from '../../../components/input/InputComponent'
+import { useLoginUserMutation } from "../../../redux/api/users-api";
+import { Context } from "../../../context/Context";
+import { toast } from "react-toastify";
 
 function Login() {
+  const [loginUser] = useLoginUserMutation()
+  const context = useContext(Context)
+  const navigate = useNavigate()
   const LoginInputInfo: UserInfos[] = [
     {
       id: 1,
-      span_name: "email",
-      name: "email",
-      type: "email",
+      span_name: "user name",
+      name: "username",
+      type: "text",
     },
     {
       id: 2,
@@ -23,11 +29,27 @@ function Login() {
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
+    const target = new FormData(e.target as HTMLFormElement)
+    const username = target.get('username') as string
+    const password = target.get('password') as string
+
+    const data:LoginUser = {
+      username,
+      password
+    }
+    console.log(username, password)
+    loginUser(data).then(res => (
+      window.localStorage.setItem('accessToken', res.data.refreshToken),
+      window.localStorage.setItem('refreshToken', res.data.refreshToken),
+      context?.setToken(true),
+      navigate('/'),
+      toast.success('Welcome Back')
+    )).catch(err => console.log(err))
   }
   return (
     <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">
       <div className="flex-1 flex items-center justify-center">
-        <form onClick={handleFormSubmit} className="w-[400px] text-white">
+        <form onSubmit={handleFormSubmit} className="w-[400px] text-white">
           <span className="flex items-center justify-center mb-[68px]">
             <SnapgramIcon />
           </span>
@@ -47,14 +69,14 @@ function Login() {
               type="submit"
               className="bg-primary_500 capitalize py-[13px] w-full rounded-lg font-semibold"
             >
-              Sign Up
+              login
             </button>
             <button
               type="button"
               className="py-3 w-full text-black justify-center bg-white rounded-lg font-semibold flex items-center space-x-3"
             >
               <GoogleIcon />
-              <span>Sign up with Google</span>
+              <span>Sign in with Google</span>
             </button>
           </div>
           <p className="text-center text-light-200  text-sm">

@@ -1,13 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleIcon } from "../../../assets/images";
 import BgImage from "../../../assets/images/bg_image.png";
 import { CreateNewUser, UserInfos } from "../../../types";
 import { FormEvent } from "react";
 import InputComponent from "../../../components/input/InputComponent";
-import { useCreateUserMutation } from "../../../redux/api/product-api";
+import { useCreateUserMutation } from "../../../redux/api/users-api";
 
 function SignUp() {
 const [createUser] = useCreateUserMutation()
+const navigate = useNavigate()
   const SignUpInputsInfo: UserInfos[] = [
     {
       id: 1,
@@ -57,7 +58,9 @@ const [createUser] = useCreateUserMutation()
     //   window.localStorage.setItem('refreshToken', JSON.stringify(res.data.refreshToken))
     // }).catch(err => console.log(err))
     
-    createUser(data).then(res => console.log(res)).catch(err => console.log(err))
+    createUser(data).then(_res => 
+      navigate('/login')
+      ).catch(error => console.log(error))
   }
 
   return (

@@ -12,3 +12,8 @@ export interface CreateNewUser {
   password: string,
   photo: string | null
 }
+
+export interface LoginUser {
+  username: string,
+  password: string
+}

@@ -10,9 +10,17 @@ export const productApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Register"]
     }),
+    loginUser: build.mutation({
+      query: (body) => ({
+        url: '/api/auth/login',
+        method: 'POST',
+        body
+      })
+    })
   }),
 })
 
 export const {
   useCreateUserMutation,
+  useLoginUserMutation
 } = productApi
