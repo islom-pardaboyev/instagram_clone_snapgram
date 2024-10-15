@@ -1,7 +1,7 @@
-import React, { lazy, LazyExoticComponent } from 'react'
+import { lazy, LazyExoticComponent } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { SuspenseComponent as Suspense } from '../../utils'
-import Header from '../../components/header/Header'
+import Aside from '../../components/aside/Aside'
 
 function DashboardRoutes() {
     const Home:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/home'))
@@ -19,7 +19,7 @@ function DashboardRoutes() {
     const Chats:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/chatPage/ChatPage'))
   return (
     <main className='grid grid-cols-12'>
-        <Header/>
+        <Aside/>
         <div className='col-span-10'>
         <Routes>
             <Route path='/' element={<Suspense><Home/></Suspense>}/>

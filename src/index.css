@@ -7,3 +7,10 @@
 *{
     font-family: 'Inter', sans-serif;
 }
+
+nav a.active{
+    @apply bg-[#877EFF] rounded-lg duration-300 font-bold
+}
+nav a.active p{
+    @apply text-white
+}

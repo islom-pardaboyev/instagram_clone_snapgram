@@ -23,7 +23,11 @@ function UserCard({item}:Props) {
       </h1>
       <p className="text-[10px] text-light-300 font-medium">Followed by jsmastery</p>
     </div>
-    <button onClick={() => follow(item.username).then(res => console.log(res))} className="px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit mx-auto bg-purple">Follow</button>
+    <button onClick={() => {
+      follow(item.username).then(res => console.log(res))
+      const token = localStorage.getItem("accessToken")
+      console.log(token)
+    }} className="px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit mx-auto bg-purple">Follow</button>
   </div>
   )
 }

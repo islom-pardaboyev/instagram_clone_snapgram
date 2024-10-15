@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
-// import { logout } from '../slices/authSlice';
 
 const baseQuery = async (args: any, api: any, extraOptions: any) => {
-  const { dispatch } = api
   const rawBaseQuery = fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers) => {
@@ -11,7 +9,7 @@ const baseQuery = async (args: any, api: any, extraOptions: any) => {
         headers.set('Authorization', `Bearer ${token}`)
       }
       return headers
-    },
+    }
   });
 
   const result = await rawBaseQuery(args, api, extraOptions);
@@ -20,7 +18,6 @@ const baseQuery = async (args: any, api: any, extraOptions: any) => {
     const { status } = result.error;
     if (status === 401 || status === 403) {
       console.error('Unauthorized access - Redirecting to login...');
-      // dispatch(logout())
     }
   }
   return result;

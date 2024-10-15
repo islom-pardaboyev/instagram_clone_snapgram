@@ -57,7 +57,15 @@ function SignUp() {
     // }).catch(err => console.log(err))
 
     createUser(data)
-      .then((_res) => {
+      .then((res) => {
+        window.localStorage.setItem(
+          "accessToken",
+          JSON.stringify(res.data.accessToken)
+        );
+        window.localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(res.data.refreshToken)
+        );
         navigate("/login");
       })
       .catch((error) => console.log(error));
