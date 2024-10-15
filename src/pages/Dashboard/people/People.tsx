@@ -1,7 +1,6 @@
 import { Skeleton } from "@chakra-ui/react";
 import { AllUsersIcon } from "../../../assets/images";
 import { useGetAllUserQuery } from "../../../redux/api/users-api";
-import { div } from "framer-motion/client";
 import { User } from "../../../types";
 
 function People() {
