@@ -10,10 +10,17 @@ export interface CreateNewUser {
   username: string,
   email: string,
   password: string,
-  photo: string | null
 }
 
 export interface LoginUser {
   username: string,
   password: string
+}
+
+export interface User {
+  _id: string
+  email: string
+  username:string
+  fullName:string
+  photo:string
 }

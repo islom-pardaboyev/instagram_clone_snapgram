@@ -5,7 +5,7 @@ import { lazy, LazyExoticComponent } from "react";
 const Login: LazyExoticComponent<any> = lazy(
   () => import("../../pages/Register/login/Login")
 );
-const SignUp = lazy(() => import("../../pages/Register/singUp/SignUp"));
+const SignUp: LazyExoticComponent<any> = lazy(() => import("../../pages/Register/singUp/SignUp"));
 
 const RegisterRoutes = () => {
   return useRoutes([

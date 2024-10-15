@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+// import { logout } from '../slices/authSlice';
 
 const baseQuery = async (args: any, api: any, extraOptions: any) => {
+  const { dispatch } = api
   const rawBaseQuery = fetchBaseQuery({
-    baseUrl: "https://sea-turtle-app-c2icp.ondigitalocean.app",
+    baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("x-auth-token")
+      const token = localStorage.getItem("accessToken")
       if (token) {
         headers.set('Authorization', `Bearer ${token}`)
       }
@@ -18,6 +20,7 @@ const baseQuery = async (args: any, api: any, extraOptions: any) => {
     const { status } = result.error;
     if (status === 401 || status === 403) {
       console.error('Unauthorized access - Redirecting to login...');
+      // dispatch(logout())
     }
   }
   return result;
@@ -25,8 +28,8 @@ const baseQuery = async (args: any, api: any, extraOptions: any) => {
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 })
 
 export const api = createApi({
-  reducerPath: 'register',
+  reducerPath: 'myApi',
   baseQuery: baseQueryWithRetry,
-  tagTypes: ["Register"], 
+  tagTypes: ["Register", "User"], 
   endpoints: () => ({}),
 })

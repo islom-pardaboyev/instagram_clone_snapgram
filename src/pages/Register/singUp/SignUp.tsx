@@ -7,8 +7,8 @@ import InputComponent from "../../../components/input/InputComponent";
 import { useCreateUserMutation } from "../../../redux/api/users-api";
 
 function SignUp() {
-const [createUser] = useCreateUserMutation()
-const navigate = useNavigate()
+  const [createUser] = useCreateUserMutation();
+  const navigate = useNavigate();
   const SignUpInputsInfo: UserInfos[] = [
     {
       id: 1,
@@ -36,7 +36,6 @@ const navigate = useNavigate()
     },
   ];
 
-
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     const target = new FormData(e.target as HTMLFormElement);
@@ -49,7 +48,6 @@ const navigate = useNavigate()
       email,
       username,
       password,
-      photo: null,
     };
     console.log(data);
     // axios.post('https://sea-turtle-app-c2icp.ondigitalocean.app/api/auth/register', data).then(res => {
@@ -57,10 +55,12 @@ const navigate = useNavigate()
     //   window.localStorage.setItem('accessToken', JSON.stringify(res.data.accessToken))
     //   window.localStorage.setItem('refreshToken', JSON.stringify(res.data.refreshToken))
     // }).catch(err => console.log(err))
-    
-    createUser(data).then(_res => 
-      navigate('/login')
-      ).catch(error => console.log(error))
+
+    createUser(data)
+      .then((_res) => {
+        navigate("/login");
+      })
+      .catch((error) => console.log(error));
   }
 
   return (
