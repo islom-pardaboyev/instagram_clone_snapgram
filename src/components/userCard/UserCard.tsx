@@ -6,7 +6,7 @@ type Props = {
 };
 
 function UserCard({ item }: Props) {
-  const { _id, fullName, photo, username } = item;
+  const { fullName, photo, username } = item;
   const [follow] = useFollowMutation();
   const handleFollow = (username: string): void => {
     follow(username)
