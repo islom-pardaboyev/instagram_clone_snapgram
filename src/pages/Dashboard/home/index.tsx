@@ -1,5 +1,5 @@
 import UserCard from "../../../components/userCard/UserCard";
-import { useGetAllUserQuery } from "../../../redux/api/users-api";
+import { useGetAllUserQuery, useGetUserQuery } from "../../../redux/api/users-api";
 import { User } from "../../../types";
 import { Skeleton } from "@chakra-ui/react";
 

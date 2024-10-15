@@ -2,6 +2,7 @@ import { lazy, LazyExoticComponent } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { SuspenseComponent as Suspense } from '../../utils'
 import Aside from '../../components/aside/Aside'
+import NotFound from '../../pages/Dashboard/notFound/NotFound'
 
 function DashboardRoutes() {
     const Home:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/home'))
@@ -35,6 +36,7 @@ function DashboardRoutes() {
             <Route path='/all-users' element={<Suspense><AllUser/></Suspense>}/>
             <Route path='/notifications' element={<Suspense><Notification/></Suspense>}/>
             <Route path='/chats' element={<Suspense><Chats/></Suspense>}/>
+            <Route path='*' element={<Suspense><NotFound/></Suspense>}/>
         </Routes>
         </div>
     </main>

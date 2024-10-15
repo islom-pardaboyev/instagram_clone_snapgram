@@ -17,6 +17,7 @@ function Aside() {
   const username = userData?.username || "";
   const { data, isLoading } = useGetUserQuery(username);
   console.log(data)
+  
   const navbarItemsFirst = [
     {
       id: 1,
