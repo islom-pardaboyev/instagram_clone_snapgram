@@ -41,7 +41,6 @@ function Login() {
       password,
     };
     window.localStorage.setItem('userData', JSON.stringify(data))
-    console.log(username, password);
     loginUser(data)
       .then(
         (res) => (
@@ -59,7 +58,10 @@ function Login() {
           toast.success("Welcome Back")
         )
       )
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error('something went wrong')
+        console.error(err)
+      });
   }
   return (
     <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">

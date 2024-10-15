@@ -16,7 +16,6 @@ function Aside() {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const username = userData?.username || "";
   const { data, isLoading } = useGetUserQuery(username);
-  console.log(data)
   
   const navbarItemsFirst = [
     {

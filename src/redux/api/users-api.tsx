@@ -1,3 +1,4 @@
+import { body } from "framer-motion/client";
 import { api } from "./index";
 
 export const productApi = api.injectEndpoints({
