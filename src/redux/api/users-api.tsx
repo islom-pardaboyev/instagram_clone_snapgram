@@ -22,8 +22,8 @@ export const productApi = api.injectEndpoints({
       }),
     }),
     getAllUser: build.query({
-      query: (limit) => ({
-        url: `/api/user/all?limit=${limit}`,
+      query: () => ({
+        url: `/api/user/all`,
       }),
     }),
     follow: build.mutation({

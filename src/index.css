@@ -8,6 +8,10 @@
     font-family: 'Inter', sans-serif;
 }
 
+.follow-btn{
+    @apply px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit  bg-purple
+}
+
 nav a.active{
     @apply bg-[#877EFF] rounded-lg duration-300 font-bold
 }

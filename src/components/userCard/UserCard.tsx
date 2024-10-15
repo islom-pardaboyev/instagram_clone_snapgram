@@ -32,7 +32,7 @@ function UserCard({ item }: Props) {
         onClick={() => {
           handleFollow(username);
         }}
-        className="px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit mx-auto bg-purple"
+        className="follow-btn mx-auto"
       >
         Follow
       </button>

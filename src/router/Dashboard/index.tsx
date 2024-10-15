@@ -18,6 +18,7 @@ function DashboardRoutes() {
     const AllUser:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/allUsers/AllUsers'))
     const Notification:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/notificationPage/NotificationPage'))
     const Chats:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/chatPage/ChatPage'))
+    const People:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/people/People'))
   return (
     <main className='grid grid-cols-12'>
         <Aside/>
@@ -25,6 +26,7 @@ function DashboardRoutes() {
         <Routes>
             <Route path='/' element={<Suspense><Home/></Suspense>}/>
             <Route path='/explore' element={<Suspense><Explore/></Suspense>}/>
+            <Route path='/people' element={<Suspense><People/></Suspense>}/>
             <Route path='/reels' element={<Suspense><Reels/></Suspense>}/>
             <Route path='/user-profile' element={<Suspense><UserProfile/></Suspense>}/>
             <Route path='/my-profile' element={<Suspense><MyProfile/></Suspense>}/>
