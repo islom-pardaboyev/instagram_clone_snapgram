@@ -65,7 +65,7 @@ function Login() {
   }
   return (
     <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 h-screen overflow-y-auto flex items-center justify-center">
         <form onSubmit={handleFormSubmit} className="w-[400px] text-white">
           <span className="flex items-center justify-center mb-[68px]">
             <SnapgramIcon />

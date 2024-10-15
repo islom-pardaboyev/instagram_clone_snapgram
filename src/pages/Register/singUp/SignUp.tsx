@@ -73,7 +73,7 @@ function SignUp() {
 
   return (
     <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 h-screen overflow-y-auto flex items-center justify-center">
         <form onSubmit={handleFormSubmit} className="w-[400px] text-white">
           <div className="text-center space-y-[12px] mb-[32px]">
             <h1 className="font-bold text-3xl">Create a new account</h1>
