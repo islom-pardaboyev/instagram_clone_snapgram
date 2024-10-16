@@ -4,9 +4,11 @@ import {
   CreatePostIcon,
   ExploreIcon,
   HomeIcon,
+  LogOutIcon,
   PeopleIcon,
   ReelsIcon,
   SavedIcon,
+  SettignsIcon,
 } from "../../assets/images";
 import { useGetUserQuery } from "../../redux/api/users-api";
 import LogoPng from '../../assets/images/Logo.png'
@@ -61,6 +63,18 @@ function Aside() {
       path: "/create",
     },
   ];
+  const navbarItemsLast = [
+    {
+      id: 1,
+      title: "Logout",
+      Icon: <LogOutIcon />,
+    },
+    {
+      id: 2,
+      title: "Settings",
+      Icon: <SettignsIcon />,
+    }
+  ]
   return (
     <aside className="col-span-2 px-[24px] bg-dark-200 h-screen overflow-y-auto text-white pt-[48px] pb-[32px]">
       <div className="flex flex-col gap-11 h-full">
@@ -79,6 +93,12 @@ function Aside() {
               <p className="text-primary_500">{item.Icon}</p>
               <p>{item.title}</p>
             </NavLink>
+          ))}
+          {navbarItemsLast.map((item) => (
+            <div key={item.id} className={"flex gap-4 p-4"}>
+              <p className="text-primary_500">{item.Icon}</p>
+              <p>{item.title}</p>
+            </div>
           ))}
         </nav>
       </div>
