@@ -53,9 +53,9 @@ function Login() {
             "refreshToken",
             JSON.stringify(res.data.refreshToken)
           ),
+          toast.success("Welcome Back"),
           context?.setToken(true),
-          navigate("/"),
-          toast.success("Welcome Back")
+          navigate("/")
         )
       )
       .catch((err) => {

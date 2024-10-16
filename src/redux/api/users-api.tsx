@@ -24,6 +24,11 @@ export const productApi = api.injectEndpoints({
     getAllUser: build.query({
       query: () => ({
         url: `/api/user/all`,
+        header: {
+          Authorization: `Bearer ${JSON.parse(
+            window.localStorage.getItem("accessToken") as string
+          )}`,
+        },
       }),
     }),
     follow: build.mutation({
