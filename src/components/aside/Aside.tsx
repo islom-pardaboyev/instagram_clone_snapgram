@@ -19,7 +19,6 @@ import { Modal } from "antd";
 function Aside() {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const username = userData?.username || "";
-  const navigate = useNavigate();
   const { data, isLoading } = useGetUserQuery(username);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
