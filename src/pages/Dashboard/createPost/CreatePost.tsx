@@ -1,7 +1,7 @@
 
 function CreatePost() {
   return (
-    <div>CreatePost</div>
+    <section className="w-full h-screen overflow-y-auto bg-black text-white"></section>
   )
 }
 

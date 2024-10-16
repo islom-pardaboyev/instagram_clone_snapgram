@@ -18,3 +18,7 @@ nav a.active{
 nav a.active p{
     @apply text-white
 }
+
+.unfollow-btn{
+    @apply px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit  bg-red-600
+}

@@ -8,42 +8,47 @@ export const productApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: [{ type: "User" }],
     }),
     loginUser: build.mutation({
-      
       query: (body) => ({
         url: "/api/auth/login",
         method: "POST",
         body,
       }),
+      invalidatesTags: [{ type: "User" }],
     }),
     getUser: build.query({
       query: (name) => ({
         url: `/api/user/profile/${name}`,
       }),
+      providesTags: [{ type: "User" }],
     }),
     getAllUser: build.query({
       query: () => ({
         url: `/api/user/all`,
-        header: {
-          Authorization: `Bearer ${JSON.parse(
-            window.localStorage.getItem("accessToken") as string
-          )}`,
-        },
       }),
+      providesTags: [{ type: "User"  }],
     }),
     follow: build.mutation({
       query: (username) => ({
         url: `/api/user/follow/${username}`,
         method: "POST",
-        header: {
-          Authorization: `Bearer ${JSON.parse(
-            window.localStorage.getItem("accessToken") as string
-          )}`,
-        },
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: [{ type: "User" }],
     }),
+    unfollow: build.mutation({
+      query: (username) => ({
+        url: `/api/user/unfollow/${username}`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "User" }],
+    }),
+    getFeed: build.query({
+      query: () => {
+        url: '/api/user/feed'
+      }
+    })
   }),
 });
 
@@ -53,4 +58,6 @@ export const {
   useFollowMutation,
   useLoginUserMutation,
   useGetUserQuery,
+  useUnfollowMutation,
+  useGetFeedQuery
 } = productApi;

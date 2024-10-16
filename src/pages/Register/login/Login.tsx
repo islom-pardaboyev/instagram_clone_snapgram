@@ -4,14 +4,12 @@ import BgImage from "../../../assets/images/bg_image.png";
 import { LoginUser, UserInfos } from "../../../types";
 import { FormEvent, useContext } from "react";
 import InputComponent from "../../../components/input/InputComponent";
-import {
-  useLoginUserMutation,
-} from "../../../redux/api/users-api";
+import { useLoginUserMutation } from "../../../redux/api/users-api";
 import { Context } from "../../../context/Context";
 import { toast } from "react-toastify";
 
 function Login() {
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, {isLoading}] = useLoginUserMutation();
 
   const context = useContext(Context);
   const navigate = useNavigate();
@@ -40,27 +38,21 @@ function Login() {
       username,
       password,
     };
-    window.localStorage.setItem('userData', JSON.stringify(data))
+    window.localStorage.setItem("userData", JSON.stringify(data));
     loginUser(data)
       .then(
         (res) => (
           console.log(res),
-          window.localStorage.setItem(
-            "accessToken",
-            JSON.stringify(res.data.accessToken)
-          ),
-          window.localStorage.setItem(
-            "refreshToken",
-            JSON.stringify(res.data.refreshToken)
-          ),
+          window.localStorage.setItem("accessToken", res.data.accessToken),
+          window.localStorage.setItem("refreshToken", res.data.refreshToken),
           toast.success("Welcome Back"),
           context?.setToken(true),
           navigate("/")
         )
       )
       .catch((err) => {
-        toast.error('something went wrong')
-        console.error(err)
+        toast.error("something went wrong");
+        console.error(err);
       });
   }
   return (
@@ -86,7 +78,7 @@ function Login() {
               type="submit"
               className="bg-primary_500 capitalize py-[13px] w-full rounded-lg font-semibold"
             >
-              login
+              {isLoading ? "loading..." : "Log In"}
             </button>
             <button
               type="button"

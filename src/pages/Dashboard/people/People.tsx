@@ -1,10 +1,26 @@
 import { Skeleton } from "@chakra-ui/react";
 import { AllUsersIcon } from "../../../assets/images";
-import { useGetAllUserQuery } from "../../../redux/api/users-api";
+import { useFollowMutation, useGetAllUserQuery, useGetUserQuery, useUnfollowMutation } from "../../../redux/api/users-api";
 import { User } from "../../../types";
 
 function People() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
+  const [follow] = useFollowMutation();
+  const [unfollow] = useUnfollowMutation();
+  const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
+  const username = currentUser?.username || "";
+  const currentUserData = useGetUserQuery(username);
+  const handleFollow = (username: string): void => {
+    follow(username)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const handleUnfollow = (username: string): void => {
+    unfollow(username)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
   console.log(data);
 
   return (
@@ -22,17 +38,44 @@ function People() {
                 className="col-span-4 h-[190px] rounded-lg"
               />
             ))
-          : data.map((item: User) => (
-              <div key={item._id} className="col-span-4 border-[3px] text-center border-dark-300 rounded-[30px] py-[40px]">
-                <img
-                  src={import.meta.env.VITE_API_URL + item.photo}
-                  className="mx-auto size-[90px] rounded-full"
-                  alt=""
-                />
-                <h1 className="mt-6 text-2xl font-bold">{item.fullName}</h1>
-                <p className="text-light-300 mt-2 mb-5">@{item.email}</p>
-                <button className="follow-btn">Follow</button>
-              </div>
+          : data.map((user: User) => (
+            <div
+            key={user._id}
+            className="bg-dark-200 col-span-6 flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400"
+          >
+            <img
+              className="size-[54px] rounded-full mx-auto"
+              src={import.meta.env.VITE_API_URL + user.photo}
+              alt=""
+            />
+            <div className="text-center">
+              <h1 className="text-[14px] font-semibold">{user.fullName}</h1>
+              <p className="text-[10px] text-light-300 font-medium">
+                Followed by jsmastery
+              </p>
+            </div>
+            {currentUserData.data?.following?.some(
+              (item: any) => item.username === user.username
+            ) ? (
+              <button
+                onClick={() => {
+                  handleUnfollow(user.username);
+                }}
+                className="unfollow-btn capitalize mx-auto"
+              >
+                unfollow
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  handleFollow(user.username);
+                }}
+                className="follow-btn capitalize mx-auto"
+              >
+                follow
+              </button>
+            )}
+          </div>
             ))}
       </div>
     </section>

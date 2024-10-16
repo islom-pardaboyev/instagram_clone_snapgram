@@ -5,7 +5,7 @@ import Aside from '../../components/aside/Aside'
 import NotFound from '../../pages/Dashboard/notFound/NotFound'
 
 function DashboardRoutes() {
-    const Home:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/home'))
+    const Home:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/home/Home'))
     const Explore:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/explore/Explore'))
     const Reels:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/reels/Reels'))
     const UserProfile:LazyExoticComponent<any> = lazy(() => import('../../pages/Dashboard/usersProfile/UsersProfile'))
