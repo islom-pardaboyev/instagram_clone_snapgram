@@ -1,4 +1,4 @@
-import { useFollowMutation, useGetUserQuery } from "../../redux/api/users-api";
+import { useFollowMutation } from "../../redux/api/users-api";
 import { User } from "../../types";
 
 type Props = {
