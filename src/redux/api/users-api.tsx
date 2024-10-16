@@ -10,6 +10,7 @@ export const productApi = api.injectEndpoints({
       }),
     }),
     loginUser: build.mutation({
+      
       query: (body) => ({
         url: "/api/auth/login",
         method: "POST",
