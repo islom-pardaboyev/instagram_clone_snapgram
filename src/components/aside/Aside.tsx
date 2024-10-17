@@ -17,10 +17,9 @@ import { useState } from "react";
 import { Modal } from "antd";
 
 function Aside() {
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  const username = userData?.username || "";
+  const currentUserUsername = window.localStorage.getItem('userData') ? JSON.parse(window.localStorage.getItem('userData') as string).username : null;
   const navigate = useNavigate()
-  const { data, isLoading } = useGetUserQuery(username);
+  const { data, isLoading } = useGetUserQuery(currentUserUsername);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const handleLogOut = () => {
