@@ -22,13 +22,13 @@ export const productApi = api.injectEndpoints({
       query: (name) => ({
         url: `/api/user/profile/${name}`,
       }),
-      providesTags: [{ type: "User" }],
+      providesTags: ["User"],
     }),
     getAllUser: build.query({
       query: () => ({
         url: `/api/user/all`,
       }),
-      providesTags: [{ type: "User"  }],
+      providesTags: ["User"],
     }),
     follow: build.mutation({
       query: (username) => ({
@@ -45,10 +45,20 @@ export const productApi = api.injectEndpoints({
       invalidatesTags: [{ type: "User" }],
     }),
     getFeed: build.query({
-      query: () => {
-        url: '/api/user/feed'
-      }
-    })
+      query: () => ({
+        url: "/api/user/feed",
+      }),
+      providesTags: ["User"],
+    }),
+    createPost: build.mutation({
+      query: (body) => ({
+        url: "/api/post",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "User" }],
+    }),
+    
   }),
 });
 
@@ -59,5 +69,6 @@ export const {
   useLoginUserMutation,
   useGetUserQuery,
   useUnfollowMutation,
-  useGetFeedQuery
+  useGetFeedQuery,
+  useCreatePostMutation,
 } = productApi;

@@ -53,7 +53,7 @@ function TopCreator() {
                   </p>
                 </div>
                 {currentUserData.data?.following?.some(
-                  (item: any) => item.username === user.username
+                  (item: any) => item.username == user.username
                 ) ? (
                   <button
                     onClick={() => {

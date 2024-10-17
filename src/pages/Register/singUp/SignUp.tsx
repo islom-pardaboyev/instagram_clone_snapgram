@@ -6,6 +6,7 @@ import { FormEvent } from "react";
 import InputComponent from "../../../components/input/InputComponent";
 import { useCreateUserMutation } from "../../../redux/api/users-api";
 
+
 function SignUp() {
   const [createUser] = useCreateUserMutation();
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   ChatIcon,
   CreatePostIcon,
@@ -19,16 +19,18 @@ import { Modal } from "antd";
 function Aside() {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const username = userData?.username || "";
+  const navigate = useNavigate()
   const { data, isLoading } = useGetUserQuery(username);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const handleLogOut = () => {
     window.localStorage.clear();
     setTimeout(() => {
-      window.location.reload()
-    }, 300);
+      window.location.reload();
+    }, 100);
+    navigate('/')
     setIsOpenModal(false);
-  }
+  };
 
   const navbarItemsFirst = [
     {
@@ -95,7 +97,7 @@ function Aside() {
             <Skeleton width="100%" height="40px" />
           ) : (
             <img
-              src={data?.photo}
+              src={import.meta.env.VITE_API_URL + data?.photo}
               className="w-[40px] h-[40px] rounded-full"
               alt=""
             />
@@ -129,7 +131,7 @@ function Aside() {
                     setIsOpenModal(true);
                   }
                 }}
-                className={"flex gap-4 p-4"}
+                className={"flex gap-4 p-4 hover:bg-white/20 rounded-lg duration-300 cursor-pointer"}
               >
                 <p className="text-primary_500">{item.Icon}</p>
                 <p>{item.title}</p>
@@ -140,7 +142,7 @@ function Aside() {
             title="Log Out"
             open={isOpenModal}
             onOk={handleLogOut}
-            onCancel={() => setIsOpenModal(false)} 
+            onCancel={() => setIsOpenModal(false)}
           >
             <p className="text-center font-bold text-xl">
               Are you sure you want to log out?
