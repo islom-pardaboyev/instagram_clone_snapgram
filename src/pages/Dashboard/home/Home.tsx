@@ -4,8 +4,6 @@ import {
   useGetAllUserQuery,
   useGetUserQuery,
 } from "../../../redux/api/users-api";
-import 'swiper/css';
-import 'swiper/css/navigation';
 
 function Home() {
   const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
