@@ -11,14 +11,11 @@ function Home() {
   const { data: currentUserData } = useGetUserQuery(username);
   const { data: allUser } = useGetAllUserQuery(true);
 
-  console.log(allUser);
-  console.log(currentUserData);
 
   const example = currentUserData?.following?.map((followingUser: any) =>
     allUser?.find((user: any) => user.username === followingUser.username)
   );
 
-  console.log(example);
 
   const UsersCard = (): JSX.Element => {
     return (

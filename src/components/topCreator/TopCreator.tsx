@@ -16,14 +16,12 @@ function TopCreator() {
   const currentUserData = useGetUserQuery(username);
   const handleFollow = (username: string): void => {
     follow(username)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+     
+     
   };
 
   const handleUnfollow = (username: string): void => {
     unfollow(username)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
   };
 
   return (

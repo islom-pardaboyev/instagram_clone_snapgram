@@ -42,7 +42,6 @@ function Login() {
     loginUser(data)
       .then(
         (res) => (
-          console.log(res),
           window.localStorage.setItem("accessToken", res.data.accessToken),
           window.localStorage.setItem("refreshToken", res.data.refreshToken),
           toast.success("Welcome Back"),

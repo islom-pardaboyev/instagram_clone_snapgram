@@ -17,15 +17,14 @@ function CreatePost() {
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
   
-    const formData = new FormData();
+    const formData = new FormData(e.target as HTMLFormElement);
     formData.append("caption", caption);
     formData.append("location", location);
     formData.append("content_alt", altText);
   
-    imagesOrVideos.forEach((file) => {
-      formData.append(`content`, file);
-    });
-    console.log(imagesOrVideos)
+    // imagesOrVideos.forEach((file) => {
+    //   formData.append("content", file);
+    // });
   
     createPost(formData);
   }
@@ -75,7 +74,6 @@ function CreatePost() {
                     </video>
                   );
                 }
-                return null;
               })}
             </div>
           ) : (

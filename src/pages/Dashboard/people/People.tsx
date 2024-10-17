@@ -12,16 +12,11 @@ function People() {
   const currentUserData = useGetUserQuery(username);
   const handleFollow = (username: string): void => {
     follow(username)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
   };
 
   const handleUnfollow = (username: string): void => {
     unfollow(username)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
   };
-  console.log(data);
 
   return (
     <section className="h-screen overflow-y-auto bg-black flex flex-col gap-10 text-white px-[60px] py-[80px]">
