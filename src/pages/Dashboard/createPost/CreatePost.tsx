@@ -5,28 +5,57 @@ import {
   ImportFilesIcon,
   LocationIcon,
 } from "../../../assets/images";
-import { useCreatePostMutation } from "../../../redux/api/users-api";
+import {
+  useCreatePostMutation,
+  useUploadFilesMutation,
+} from "../../../redux/api/users-api";
 
 function CreatePost() {
-  const [createPost] = useCreatePostMutation()
+  const [uploadFiles, { isLoading }] = useUploadFilesMutation();
+  const [createPost] = useCreatePostMutation();
   const [imagesOrVideos, setImagesOrVideos] = useState<File[]>([]);
   const [caption, setCaption] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [altText, setAltText] = useState<string>("");
+  const [saveImages, setSaveImages] = useState<string[]>([]);
+
+  function handleUpload() {
+    const formData = new FormData();
+    formData.append("location", location);
+    formData.append("content_alt", altText);
+    imagesOrVideos.forEach((img) => {
+      formData.append("files", img, img.name);
+    });
+
+    uploadFiles(formData)
+      .unwrap()
+      .then((res) => {
+        setSaveImages(res.files.map((item: any) => item[0].url));
+      })
+      .catch((error) => {
+        console.error("Upload failed:", error);
+        // Display an error message to the user
+      });
+  }
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
-  
-    const formData = new FormData(e.target as HTMLFormElement);
-    formData.append("caption", caption);
-    formData.append("location", location);
-    formData.append("content_alt", altText);
-  
-    // imagesOrVideos.forEach((file) => {
-    //   formData.append("content", file);
-    // });
-  
-    createPost(formData);
+    const data = {
+      content: [...saveImages],
+      location,
+      content_alt: altText,
+      caption,
+    };
+
+    createPost(data)
+      .unwrap()
+      .then(() => {
+        // Handle successful post creation
+      })
+      .catch((error) => {
+        console.error("Post creation failed:", error);
+        // Display an error message to the user
+      });
   }
 
   return (
@@ -40,41 +69,75 @@ function CreatePost() {
       <form onSubmit={handleFormSubmit} className="flex flex-col gap-9">
         <label className="flex flex-col gap-3">
           <span className="font-medium text-lg">Caption</span>
-          <textarea required
+          <textarea
+            required
             rows={4}
+            name="caption"
             className="bg-dark-300 resize-none p-4 outline-none"
+            placeholder="Write a caption..."
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder="Write a caption..."
           ></textarea>
         </label>
-        <label className="flex flex-col gap-3">
+        <label className="flex flex-col gap-3 relative">
           <span className="font-medium text-lg">Add Photos/Videos</span>
           {imagesOrVideos.length ? (
-            <div className="bg-dark-300  flex gap-3 p-10">
-              {imagesOrVideos.map((item, index) => {
-                if (item.type.includes("image")) {
-                  return (
-                    <img
-                      key={index}
-                      width={200}
-                      src={URL.createObjectURL(item)}
-                      alt={`Uploaded image ${index}`}
-                      className="mb-4 object-contain"
-                    />
-                  );
-                } else if (item.type.includes("video")) {
-                  return (
-                    <video key={index} controls className="mb-4">
-                      <source
-                        src={URL.createObjectURL(item)}
-                        type={item.type}
+            <div className="bg-dark-300 w-full overflow-y-auto flex gap-3 p-10">
+              {imagesOrVideos.map((i, inx) => {
+                const mediaUrl = URL.createObjectURL(i);
+                return (
+                  <div className="relative" key={inx}>
+                    {i.type.includes("video") ? (
+                      <video src={mediaUrl} controls className="object-contain" />
+                    ) : (
+                      <img
+                        width={300}
+                        className="object-contain"
+                        src={mediaUrl}
+                        alt={`media-${inx}`}
                       />
-                      Your browser does not support the video tag.
-                    </video>
-                  );
-                }
+                    )}
+                    <button
+                      type="button"
+                      className="absolute bottom-0 left-0 bg-red-500 text-white p-2"
+                      onClick={() =>
+                        setImagesOrVideos(imagesOrVideos.filter((_, index) => index !== inx))
+                      }
+                    >
+                      Remove
+                    </button>
+                  </div>
+                );
               })}
+              <div className="absolute right-3 bottom-3 flex items-center space-x-5">
+                <button
+                  type="button"
+                  className="font-semibold py-3 h-fit px-[20px] bg-purple w-fit mt-auto ml-auto rounded-lg"
+                  onClick={handleUpload}
+                >
+                  {isLoading ? "Uploading..." : "Upload"}
+                </button>
+                <label htmlFor="chooseFile" className="cursor-pointer">
+                  <input
+                    onChange={(e) =>
+                      setImagesOrVideos((prev) => [
+                        ...prev,
+                        ...Array.from(e.target.files || []).filter(
+                          (file) => !prev.includes(file)
+                        ),
+                      ])
+                    }
+                    type="file"
+                    id="chooseFile"
+                    hidden
+                    accept="image/*, video/*"
+                    multiple
+                  />
+                  <span className="font-semibold py-3 h-fit px-[20px] bg-purple w-fit mt-auto ml-auto rounded-lg">
+                    Choose another one
+                  </span>
+                </label>
+              </div>
             </div>
           ) : (
             <div className="bg-dark-300 py-[48px] relative">
@@ -111,22 +174,26 @@ function CreatePost() {
         <label className="flex flex-col gap-3">
           <span className="font-medium text-lg">Add Location</span>
           <div className="bg-dark-300 flex items-center p-2 justify-between">
-            <input required
+            <input
+              name="location"
+              required
               className="outline-none bg-transparent w-full p-2"
+              placeholder="Enter location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Enter location"
             />
             <LocationIcon />
           </div>
         </label>
         <label className="flex flex-col gap-3">
           <span className="font-medium text-lg">Photo/Video Alt Text</span>
-          <input required
+          <input
+            name="content_alt"
+            required
             className="bg-dark-300 p-4 outline-none"
+            placeholder="Alt text for accessibility"
             value={altText}
             onChange={(e) => setAltText(e.target.value)}
-            placeholder="Alt text for accessibility"
           />
         </label>
         <button

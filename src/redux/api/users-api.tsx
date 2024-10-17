@@ -58,7 +58,14 @@ export const productApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "User" }],
     }),
-    
+    uploadFiles: build.mutation({
+      query: (body) => ({
+        url: '/api/upload/files',
+        method: "POST",
+        body
+      }),
+      invalidatesTags: [{ type: "User" }]
+    })
   }),
 });
 
@@ -71,4 +78,5 @@ export const {
   useUnfollowMutation,
   useGetFeedQuery,
   useCreatePostMutation,
+  useUploadFilesMutation
 } = productApi;

@@ -2,20 +2,23 @@ import TopCreator from "../../../components/topCreator/TopCreator";
 import NoImg from "../../../assets/images/no-image.jpg";
 import {
   useGetAllUserQuery,
+  useGetFeedQuery,
   useGetUserQuery,
 } from "../../../redux/api/users-api";
 
 function Home() {
-  const currentUserUsername = window.localStorage.getItem('userData')
-    ? JSON.parse(window.localStorage.getItem('userData') as string).username
+  const currentUserUsername = window.localStorage.getItem("userData")
+    ? JSON.parse(window.localStorage.getItem("userData") as string).username
     : null;
-
+  const { data: feeds } = useGetFeedQuery(true);
   const { data: currentUserData } = useGetUserQuery(currentUserUsername);
   const { data: allUser } = useGetAllUserQuery(true);
-
+  console.log(currentUserData);
   const example = currentUserData?.following?.map((followingUser: any) =>
     allUser?.find((user: any) => user.username === followingUser.username)
   );
+
+  console.log(feeds);
 
   const UsersCard = (): JSX.Element => {
     return (
@@ -59,6 +62,5 @@ function Home() {
     </section>
   );
 }
-
 
 export default Home;
