@@ -29,7 +29,7 @@ function Home() {
       month: "long",
       hour: "numeric",
       minute: "numeric",
-      hour12: true, 
+      hour12: true,
     };
     return date.toLocaleString("en-US", options).replace(",", " at");
   };
@@ -43,6 +43,8 @@ function Home() {
   const example = currentUserData?.following?.map((followingUser: any) =>
     allUser?.find((user: any) => user.username === followingUser.username)
   );
+
+  console.log(feeds);
 
   const UsersCard = (): JSX.Element => {
     return (
@@ -77,7 +79,7 @@ function Home() {
             </div>
           ) : (
             <p className="text-center font-bold text-light-300 text-xs">
-              No...
+              Not yet followed User available...
             </p>
           )}
         </header>
@@ -116,31 +118,35 @@ function Home() {
                     <p className="font-semibold">{post?.content_alt}</p>
                   </header>
                   <Swiper
+                    key={index}
                     navigation={true}
                     spaceBetween={10}
                     modules={[Navigation]}
                   >
-                    {post.content?.map((content: any) => {
+                    {post.content?.map((content: any, contentIndex: number) => {
+                      console.log(content);
                       if (
                         imageFileTypes.some((type) => content.includes(type))
                       ) {
                         return (
-                          <SwiperSlide className="select-none">
+                          <SwiperSlide
+                            key={contentIndex}
+                            className="select-none"
+                          >
                             <img
                               className="rounded-[30px]"
-                              key={import.meta.env.VITE_API_KEY + content}
                               src={import.meta.env.VITE_API_URL + content}
                               onError={(e) => (e.currentTarget.src = NoImg)}
                               alt="Post content"
                             />
                           </SwiperSlide>
                         );
-                      } else if (
-                        !imageFileTypes.some((type) => content.includes(type))
-                      ) {
+                      } else {
                         return (
-                          <SwiperSlide>
+                          <SwiperSlide key={contentIndex}>
                             <video
+                              controls
+                              className="w-full h-full object-cover"
                               src={import.meta.env.VITE_API_URL + content}
                             ></video>
                           </SwiperSlide>
