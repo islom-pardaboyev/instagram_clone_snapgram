@@ -46,7 +46,7 @@ export const productApi = api.injectEndpoints({
     }),
     getFeed: build.query({
       query: () => ({
-        url: "/api/user/feed",
+        url: "/api/user/feed?limit=3000",
       }),
       providesTags: ["User"],
     }),

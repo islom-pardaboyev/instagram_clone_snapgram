@@ -123,36 +123,43 @@ function Home() {
                     spaceBetween={10}
                     modules={[Navigation]}
                   >
-                    {post.content?.map((content: any, contentIndex: number) => {
-                      console.log(content);
-                      if (
-                        imageFileTypes.some((type) => content.includes(type))
-                      ) {
-                        return (
-                          <SwiperSlide
-                            key={contentIndex}
-                            className="select-none"
-                          >
-                            <img
-                              className="rounded-[30px]"
-                              src={import.meta.env.VITE_API_URL + content}
-                              onError={(e) => (e.currentTarget.src = NoImg)}
-                              alt="Post content"
-                            />
-                          </SwiperSlide>
-                        );
-                      } else {
-                        return (
-                          <SwiperSlide key={contentIndex}>
-                            <video
-                              controls
-                              className="w-full h-full object-cover"
-                              src={import.meta.env.VITE_API_URL + content}
-                            ></video>
-                          </SwiperSlide>
-                        );
-                      }
-                    })}
+                    {post.content &&
+                      post.content?.map(
+                        (content: any, contentIndex: number) => {
+                          if (
+                            typeof content === "string" && // content satr ekanligini tekshirish
+                            imageFileTypes.some((type) =>
+                              content?.includes(type)
+                            )
+                          ) {
+                            return (
+                              <SwiperSlide
+                                key={contentIndex}
+                                className="select-none"
+                              >
+                                <img
+                                  className="rounded-[30px]"
+                                  src={import.meta.env.VITE_API_URL + content}
+                                  onError={(e) => (e.currentTarget.src = NoImg)}
+                                  alt="Post content"
+                                />
+                              </SwiperSlide>
+                            );
+                          } else if (typeof content === "string") {
+                            return (
+                              <SwiperSlide key={contentIndex}>
+                                <video
+                                  controls
+                                  className="w-full h-full object-cover"
+                                  src={content}
+                                ></video>
+                              </SwiperSlide>
+                            );
+                          } else {
+                            return null; 
+                          }
+                        }
+                      )}
                   </Swiper>
                 </div>
               ))
