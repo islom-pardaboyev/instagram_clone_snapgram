@@ -44,7 +44,6 @@ function Home() {
     allUser?.find((user: any) => user.username === followingUser.username)
   );
 
-  console.log(feeds);
 
   const UsersCard = (): JSX.Element => {
     return (
@@ -139,7 +138,7 @@ function Home() {
                               >
                                 <img
                                   className="rounded-[30px]"
-                                  src={import.meta.env.VITE_API_URL + content}
+                                  src={content}
                                   onError={(e) => (e.currentTarget.src = NoImg)}
                                   alt="Post content"
                                 />
