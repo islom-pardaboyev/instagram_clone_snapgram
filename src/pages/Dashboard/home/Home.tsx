@@ -5,6 +5,10 @@ import {
   useGetFeedQuery,
   useGetUserQuery,
 } from "../../../redux/api/users-api";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
 
 function Home() {
   const imageFileTypes = [
@@ -20,16 +24,13 @@ function Home() {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-
     const options: Intl.DateTimeFormatOptions = {
       day: "numeric",
       month: "long",
       hour: "numeric",
       minute: "numeric",
-      hour12: true, // For AM/PM format
+      hour12: true, 
     };
-
-    // Format date in "26 June at 09:32 PM" format
     return date.toLocaleString("en-US", options).replace(",", " at");
   };
 
@@ -66,13 +67,6 @@ function Home() {
     );
   };
 
-  const findPostOwner = allUser?.filter((user: any) =>
-    feeds?.posts?.some((item: any) => item?.owner === user._id)
-  );
-
-  console.log(findPostOwner);
-  console.log(feeds?.posts);
-
   return (
     <section className="grid grid-cols-12 h-screen overflow-y-auto text-white">
       <div className="col-span-7 text-white px-[53px] py-[60px] bg-black">
@@ -97,41 +91,63 @@ function Home() {
                   className="px-[29px] py-[36px] border border-dark-400"
                 >
                   <header className="mb-[40px] ">
-                    <div className="mb-[20px] flex flex-col">
-                      <h1 className="text-[18px] font-semibold">
-                        {post?.owner}
-                      </h1>
-                      <p className="text-[14px] text-light-300 font-bold">
-                        {formatDate(post?.createdAt)}
-                      </p>
+                    <div className="flex gap-[10px]">
+                      <img
+                        className="size-[50px] rounded-full object-cover"
+                        src={
+                          import.meta.env.VITE_API_URL +
+                          allUser?.find((user: any) => user._id === post?.owner)
+                            ?.photo
+                        }
+                        onError={(e) => (e.currentTarget.src = NoImg)}
+                        alt="Post owner"
+                      />
+                      <div className="mb-[20px] flex flex-col">
+                        <h1 className="text-[18px] font-semibold">
+                          {allUser?.find(
+                            (user: any) => user._id === post?.owner
+                          )?.username || "Unknown User"}
+                        </h1>
+                        <p className="text-[14px] text-light-300 font-bold">
+                          {formatDate(post?.createdAt)}
+                        </p>
+                      </div>
                     </div>
                     <p className="font-semibold">{post?.content_alt}</p>
                   </header>
-                  <div>
+                  <Swiper
+                    navigation={true}
+                    spaceBetween={5}
+                    modules={[Navigation]}
+                  >
                     {post.content?.map((content: any) => {
                       if (
                         imageFileTypes.some((type) => content.includes(type))
                       ) {
                         return (
-                          <img
-                            className="rounded-[30px]"
-                            key={content}
-                            src={import.meta.env.VITE_API_URL + content}
-                            onError={(e) => (e.currentTarget.src = NoImg)}
-                            alt="Post content"
-                          />
+                          <SwiperSlide className="select-none">
+                            <img
+                              className="rounded-[30px]"
+                              key={import.meta.env.VITE_API_KEY + content}
+                              src={import.meta.env.VITE_API_URL + content}
+                              onError={(e) => (e.currentTarget.src = NoImg)}
+                              alt="Post content"
+                            />
+                          </SwiperSlide>
                         );
                       } else if (
                         !imageFileTypes.some((type) => content.includes(type))
                       ) {
                         return (
-                          <video
-                            src={import.meta.env.VITE_API_URL + content}
-                          ></video>
+                          <SwiperSlide>
+                            <video
+                              src={import.meta.env.VITE_API_URL + content}
+                            ></video>
+                          </SwiperSlide>
                         );
                       }
                     })}
-                  </div>
+                  </Swiper>
                 </div>
               ))
             ) : (
@@ -140,6 +156,7 @@ function Home() {
           </div>
         </div>
       </div>
+      
       <TopCreator />
     </section>
   );

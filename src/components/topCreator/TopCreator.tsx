@@ -6,6 +6,7 @@ import {
   useUnfollowMutation,
 } from "../../redux/api/users-api";
 import { User } from "../../types";
+import NoImg from '../../assets/images/no-image.jpg'
 
 function TopCreator() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
@@ -25,7 +26,7 @@ function TopCreator() {
   };
 
   return (
-    <div className="col-span-5 px-6 py-12 bg-dark-200">
+    <aside className="col-span-5 absolute top-0 right-0 h-screen overflow-y-auto px-6 py-12 bg-dark-200">
       <h1 className="font-bold text-[24px]">Top Creators</h1>
       <div className="grid grid-cols-12 gap-6 mt-10">
         {isLoading
@@ -42,6 +43,7 @@ function TopCreator() {
                 <img
                   className="size-[54px] rounded-full mx-auto"
                   src={import.meta.env.VITE_API_URL + user.photo}
+                  onError={(e) => e.currentTarget.src = NoImg}
                   alt=""
                 />
                 <div className="text-center">
@@ -74,7 +76,7 @@ function TopCreator() {
               </div>
             ))}
       </div>
-    </div>
+    </aside>
   );
 }
 
