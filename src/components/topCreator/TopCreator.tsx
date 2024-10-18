@@ -26,7 +26,7 @@ function TopCreator() {
   };
 
   return (
-    <aside className="col-span-5 h-screen overflow-y-auto px-6 py-12 bg-dark-200">
+    <aside className="col-span-5 sticky top-0 right-0 h-screen overflow-y-auto px-6 py-12 bg-dark-200">
       <h1 className="font-bold text-[24px]">Top Creators</h1>
       <div className="grid grid-cols-12 gap-6 mt-10">
         {isLoading
