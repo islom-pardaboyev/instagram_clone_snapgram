@@ -156,8 +156,9 @@ function Home() {
           </div>
         </div>
       </div>
-      
+      <div className="col-span-5">
       <TopCreator />
+      </div>
     </section>
   );
 }
