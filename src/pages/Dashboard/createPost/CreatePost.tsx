@@ -9,10 +9,12 @@ import {
   useCreatePostMutation,
   useUploadFilesMutation,
 } from "../../../redux/api/users-api";
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
+  const navigate = useNavigate()
   const [uploadFiles, { isLoading }] = useUploadFilesMutation();
-  const [createPost] = useCreatePostMutation();
+  const [createPost, { isLoading: isLoadingPost }] = useCreatePostMutation();
   const [imagesOrVideos, setImagesOrVideos] = useState<File[]>([]);
   const [caption, setCaption] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -32,10 +34,6 @@ function CreatePost() {
       .then((res) => {
         setSaveImages(res.files.map((item: any) => item[0].url));
       })
-      .catch((error) => {
-        console.error("Upload failed:", error);
-        // Display an error message to the user
-      });
   }
 
   function handleFormSubmit(e: FormEvent) {
@@ -48,14 +46,7 @@ function CreatePost() {
     };
 
     createPost(data)
-      .unwrap()
-      .then(() => {
-        // Handle successful post creation
-      })
-      .catch((error) => {
-        console.error("Post creation failed:", error);
-        // Display an error message to the user
-      });
+      .unwrap().then(_ => navigate('/'))
   }
 
   return (
@@ -82,7 +73,7 @@ function CreatePost() {
         <label className="flex flex-col gap-3 relative">
           <span className="font-medium text-lg">Add Photos/Videos</span>
           {imagesOrVideos.length ? (
-            <div className="bg-dark-300 w-full overflow-y-auto flex gap-3 p-10">
+            <div className="bg-dark-300 w-full flex-wrap flex gap-3 p-10">
               {imagesOrVideos.map((i, inx) => {
                 const mediaUrl = URL.createObjectURL(i);
                 return (
@@ -99,7 +90,7 @@ function CreatePost() {
                     )}
                     <button
                       type="button"
-                      className="absolute bottom-0 left-0 bg-red-500 text-white p-2"
+                      className="absolute top-0 right-0 bg-red-500 text-white p-2"
                       onClick={() =>
                         setImagesOrVideos(imagesOrVideos.filter((_, index) => index !== inx))
                       }
@@ -198,9 +189,9 @@ function CreatePost() {
         </label>
         <button
           type="submit"
-          className="font-semibold py-3 px-[20px] bg-purple w-fit ml-auto rounded-lg"
+          className={`font-semibold py-3 px-[20px] bg-purple capitalize w-fit ml-auto rounded-lg ${isLoadingPost ? "opacity-80" : 'opacity-100'}`}
         >
-          Share Post
+          {isLoadingPost ? "sharing post..." : "share post"}
         </button>
       </form>
     </section>

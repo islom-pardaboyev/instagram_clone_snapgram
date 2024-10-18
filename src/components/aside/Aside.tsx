@@ -21,6 +21,7 @@ function Aside() {
   const navigate = useNavigate()
   const { data, isLoading } = useGetUserQuery(currentUserUsername);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  console.log(data)
 
   const handleLogOut = () => {
     window.localStorage.clear();
