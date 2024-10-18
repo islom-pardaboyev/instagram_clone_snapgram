@@ -101,14 +101,14 @@ function Home() {
                           allUser?.find((user: any) => user._id === post?.owner)
                             ?.photo
                         }
-                        onError={(e) => (e.currentTarget.src = NoImg)}
+                        onError={(e) => (e.currentTarget.src = import.meta.env.VITE_API_URL + currentUserData?.photo)}
                         alt="Post owner"
                       />
                       <div className="mb-[20px] flex flex-col">
                         <h1 className="text-[18px] font-semibold">
                           {allUser?.find(
                             (user: any) => user._id === post?.owner
-                          )?.username || "Unknown User"}
+                          )?.username || currentUserData?.username}
                         </h1>
                         <p className="text-[14px] text-light-300 font-bold">
                           {formatDate(post?.createdAt)}
@@ -127,7 +127,7 @@ function Home() {
                       post.content?.map(
                         (content: any, contentIndex: number) => {
                           if (
-                            typeof content === "string" && // content satr ekanligini tekshirish
+                            typeof content === "string" && 
                             imageFileTypes.some((type) =>
                               content?.includes(type)
                             )
