@@ -117,7 +117,7 @@ function Home() {
                   </header>
                   <Swiper
                     navigation={true}
-                    spaceBetween={5}
+                    spaceBetween={10}
                     modules={[Navigation]}
                   >
                     {post.content?.map((content: any) => {
