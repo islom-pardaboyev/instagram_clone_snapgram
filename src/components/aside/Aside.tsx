@@ -15,6 +15,7 @@ import LogoPng from "../../assets/images/Logo.png";
 import { Skeleton } from "@chakra-ui/react";
 import { useState } from "react";
 import { Modal } from "antd";
+import NoImg from '../../assets/images/no-image.jpg'
 
 function Aside() {
   const currentUserUsername = window.localStorage.getItem('userData') ? JSON.parse(window.localStorage.getItem('userData') as string).username : null;
@@ -97,6 +98,7 @@ function Aside() {
           ) : (
             <img
               src={import.meta.env.VITE_API_URL + data?.photo}
+              onError={(e) => e.currentTarget.src = NoImg}
               className="w-[40px] h-[40px] rounded-full"
               alt=""
             />

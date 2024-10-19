@@ -6,6 +6,7 @@ import {
   useUnfollowMutation,
 } from "../../redux/api/users-api";
 import { User } from "../../types";
+import NoImg from '../../assets/images/no-image.jpg'
 
 function TopCreator() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
@@ -20,6 +21,7 @@ function TopCreator() {
      
   };
 
+  console.log(data)
   const handleUnfollow = (username: string): void => {
     unfollow(username)
   };
@@ -42,7 +44,7 @@ function TopCreator() {
                 <img
                   className="size-[54px] rounded-full object-cover mx-auto"
                   src={import.meta.env.VITE_API_URL + user.photo}
-                  onError={(e) => e.currentTarget.src = user.photo}
+                  onError={(e) => e.currentTarget.src = NoImg}
                   alt=""
                 />
                 <div className="text-center">
