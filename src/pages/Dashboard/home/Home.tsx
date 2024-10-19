@@ -10,18 +10,17 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 
+export const imageFileTypes = [
+  ".png",
+  ".jpeg",
+  ".jpg",
+  ".gif",
+  ".bmp",
+  ".webp",
+  ".tiff",
+  ".svg",
+];
 function Home() {
-  const imageFileTypes = [
-    ".png",
-    ".jpeg",
-    ".jpg",
-    ".gif",
-    ".bmp",
-    ".webp",
-    ".tiff",
-    ".svg",
-  ];
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
@@ -44,14 +43,16 @@ function Home() {
     allUser?.find((user: any) => user.username === followingUser.username)
   );
 
-
   const UsersCard = (): JSX.Element => {
     return (
-      <div className="flex gap-4 w-[96px] h-[84px]">
+      <div className="flex items-center gap-4 overflow-y-auto">
         {example
           ?.filter((user: any) => user)
           .map((user: any, index: number) => (
-            <div key={index} className="text-center flex flex-col items-center">
+            <div
+              key={index}
+              className="text-center flex flex-col min-w-[86px] items-center"
+            >
               <img
                 src={import.meta.env.VITE_API_URL + user.photo}
                 onError={(e) => (e.currentTarget.src = NoImg)}
@@ -100,7 +101,11 @@ function Home() {
                           allUser?.find((user: any) => user._id === post?.owner)
                             ?.photo
                         }
-                        onError={(e) => (e.currentTarget.src = import.meta.env.VITE_API_URL + currentUserData?.photo)}
+                        onError={(e) =>
+                          (e.currentTarget.src =
+                            import.meta.env.VITE_API_URL +
+                            currentUserData?.photo)
+                        }
                         alt="Post owner"
                       />
                       <div className="mb-[20px] flex flex-col">
@@ -126,7 +131,7 @@ function Home() {
                       post.content?.map(
                         (content: any, contentIndex: number) => {
                           if (
-                            typeof content === "string" && 
+                            typeof content === "string" &&
                             imageFileTypes.some((type) =>
                               content?.includes(type)
                             )
@@ -136,12 +141,14 @@ function Home() {
                                 key={contentIndex}
                                 className="select-none"
                               >
-                                <img
-                                  className="rounded-[30px]"
-                                  src={content}
-                                  onError={(e) => (e.currentTarget.src = NoImg)}
-                                  alt="Post content"
-                                />
+                                  <img
+                                    className="rounded-[30px]"
+                                    src={content}
+                                    onError={(e) =>
+                                      (e.currentTarget.src = NoImg)
+                                    }
+                                    alt="Post content"
+                                  />
                               </SwiperSlide>
                             );
                           } else if (typeof content === "string") {
@@ -155,7 +162,7 @@ function Home() {
                               </SwiperSlide>
                             );
                           } else {
-                            return null; 
+                            return null;
                           }
                         }
                       )}

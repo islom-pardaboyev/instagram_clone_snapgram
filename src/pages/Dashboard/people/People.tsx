@@ -36,15 +36,16 @@ function People() {
           : data.map((user: User) => (
             <div
             key={user._id}
-            className="bg-dark-200 col-span-6 flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400"
+            className="bg-dark-200 col-span-4 flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400"
           >
             <img
               className="size-[54px] rounded-full mx-auto"
               src={import.meta.env.VITE_API_URL + user.photo}
+              onError={(e) => e.currentTarget.src = user.photo}
               alt=""
             />
             <div className="text-center">
-              <h1 className="text-[14px] font-semibold">{user.fullName}</h1>
+              <a href={`/profile/${user.username}`} className="text-[14px] font-semibold hover:underline">{user.fullName}</a>
               <p className="text-[10px] text-light-300 font-medium">
                 Followed by jsmastery
               </p>

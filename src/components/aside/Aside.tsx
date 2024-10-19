@@ -104,14 +104,14 @@ function Aside() {
           {isLoading ? (
             <Skeleton width="100%" height="20px" />
           ) : (
-            <div className="flex flex-col text-white">
+            <NavLink to={`/profile/${data?.username}`} className="flex flex-col text-white">
               <h1 className="text-[18px] font-bold line-clamp-1">
                 {data?.fullName}
               </h1>
               <p className="text-[14px] line-clamp-1 text-light-300">
                 @{data?.username}
               </p>
-            </div>
+            </NavLink>
           )}
         </div>
         <nav className="flex flex-col gap-6 h-full">

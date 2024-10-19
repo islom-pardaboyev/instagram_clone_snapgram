@@ -65,6 +65,12 @@ export const productApi = api.injectEndpoints({
         body
       }),
       invalidatesTags: [{ type: "User" }]
+    }),
+    getAllPostByUser: build.query({
+      query: (username) => ({
+        url: `/api/post/${username}`
+      }),
+      providesTags: ["User"],
     })
   }),
 });
@@ -78,5 +84,6 @@ export const {
   useUnfollowMutation,
   useGetFeedQuery,
   useCreatePostMutation,
-  useUploadFilesMutation
+  useUploadFilesMutation,
+  useGetAllPostByUserQuery
 } = productApi;
