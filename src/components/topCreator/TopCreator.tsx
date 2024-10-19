@@ -6,7 +6,7 @@ import {
   useUnfollowMutation,
 } from "../../redux/api/users-api";
 import { User } from "../../types";
-import NoImg from '../../assets/images/no-image.jpg'
+import NoImg from "../../assets/images/no-image.jpg";
 
 function TopCreator() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
@@ -16,14 +16,12 @@ function TopCreator() {
   const username = currentUser?.username || "";
   const currentUserData = useGetUserQuery(username);
   const handleFollow = (username: string): void => {
-    follow(username)
-     
-     
+    follow(username);
   };
 
-  console.log(data)
+  console.log(data);
   const handleUnfollow = (username: string): void => {
-    unfollow(username)
+    unfollow(username);
   };
 
   return (
@@ -43,12 +41,17 @@ function TopCreator() {
               >
                 <img
                   className="size-[54px] rounded-full object-cover mx-auto"
-                  src={import.meta.env.VITE_API_URL + user.photo}
-                  onError={(e) => e.currentTarget.src = NoImg}
+                  src={user.photo.includes('null') ? NoImg : import.meta.env.VITE_API_URL + user.photo}
+                  onError={(e) => (e.currentTarget.src = user.photo)}
                   alt=""
                 />
                 <div className="text-center">
-                  <a href={`/profile/${user.username}`} className="text-[14px] font-semibold hover:underline">{user.fullName}</a>
+                  <a
+                    href={`/profile/${user.username}`}
+                    className="text-[14px] font-semibold hover:underline"
+                  >
+                    {user.fullName}
+                  </a>
                   <p className="text-[10px] text-light-300 font-medium">
                     Followed by jsmastery
                   </p>

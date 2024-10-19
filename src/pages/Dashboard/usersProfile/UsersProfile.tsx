@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { imageFileTypes } from "../home/Home";
 import { MultiplePostIcon } from "../../../assets/images";
+import NoImg from '../../../assets/images/no-image.jpg'
 
 function UsersProfile() {
   const videoFileTypes = [".mp4", ".webm", ".ogg"];
@@ -49,7 +50,7 @@ function UsersProfile() {
             <img
               className="w-[150px] h-[150px] rounded-full object-cover"
               src={import.meta.env.VITE_API_URL + profile.photo}
-              onError={(e) => (e.currentTarget.src = profile.photo)}
+              onError={(e) => (e.currentTarget.src = NoImg)}
               alt={profile.fullName}
             />
             <div>
