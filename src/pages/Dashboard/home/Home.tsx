@@ -42,6 +42,7 @@ function Home() {
   const example = currentUserData?.following?.map((followingUser: any) =>
     allUser?.find((user: any) => user.username === followingUser.username)
   );
+  console.log(feeds);
 
   const UsersCard = (): JSX.Element => {
     return (
@@ -130,39 +131,18 @@ function Home() {
                     {post.content &&
                       post.content?.map(
                         (content: any, contentIndex: number) => {
-                          if (
-                            typeof content === "string" &&
-                            imageFileTypes.some((type) =>
-                              content?.includes(type)
-                            )
-                          ) {
-                            return (
-                              <SwiperSlide
-                                key={contentIndex}
-                                className="select-none"
-                              >
-                                  <img
-                                    className="rounded-[30px]"
-                                    src={content}
-                                    onError={(e) =>
-                                      (e.currentTarget.src = NoImg)
-                                    }
-                                    alt="Post content"
-                                  />
-                              </SwiperSlide>
-                            );
-                          } else if (typeof content === "string") {
+                          if (content?.type == "VIDEO") {
                             return (
                               <SwiperSlide key={contentIndex}>
-                                <video
-                                  controls
-                                  className="w-full h-full object-cover"
-                                  src={content}
-                                ></video>
+                                <video controls className="w-full h-[500px] object-contain" src={content?.url}></video>
                               </SwiperSlide>
                             );
                           } else {
-                            return null;
+                            return (
+                              <SwiperSlide key={contentIndex}>
+                                <img className="w-full h-[500px] object-contain" src={content?.url} />
+                              </SwiperSlide>
+                            );
                           }
                         }
                       )}

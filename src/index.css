@@ -22,3 +22,17 @@ nav a.active p{
 .unfollow-btn{
     @apply px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit  bg-red-600
 }
+.swiper-button-next{
+    @apply rounded-full flex items-center justify-center !size-[30px] bg-white !text-black
+}
+
+.swiper-button-next::after{
+    @apply !scale-[.3] !font-bold
+}
+.swiper-button-prev{
+    @apply rounded-full flex items-center justify-center !size-[30px] bg-white !text-black
+}
+
+.swiper-button-prev::after{
+    @apply !scale-[.3] !font-bold
+}

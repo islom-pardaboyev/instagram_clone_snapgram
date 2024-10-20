@@ -10,16 +10,17 @@ import {
   useUploadFilesMutation,
 } from "../../../redux/api/users-api";
 import { useNavigate } from "react-router-dom";
+import { imageFileTypes } from "../home/Home";
 
 function CreatePost() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [uploadFiles, { isLoading }] = useUploadFilesMutation();
   const [createPost, { isLoading: isLoadingPost }] = useCreatePostMutation();
   const [imagesOrVideos, setImagesOrVideos] = useState<File[]>([]);
   const [caption, setCaption] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [altText, setAltText] = useState<string>("");
-  const [saveImages, setSaveImages] = useState<string[]>([]);
+  const [saveImages, setSaveImages] = useState<any>([]);
 
   function handleUpload() {
     const formData = new FormData();
@@ -29,24 +30,32 @@ function CreatePost() {
       formData.append("files", img, img.name);
     });
 
-    uploadFiles(formData)
-      .unwrap()
-      .then((res) => {
-        setSaveImages(res.files.map((item: any) => item[0].url));
-      })
+    uploadFiles(formData).unwrap().then((res) => {
+      const urls = res.data.files.flat().map((item: { url: string }) => item.url);
+      const content = urls.map((url: string) => {
+        const isImage = imageFileTypes.some((type: string) => url.includes(type));
+        const type = isImage ? "IMAGE" : "VIDEO";  // Fayl turi aniqlanadi
+        return { url, type };
+      });
+      
+      
+      setSaveImages(content)
+      
+    })
   }
+  console.log(saveImages);
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     const data = {
-      content: [...saveImages],
+      content: saveImages,
       location,
       content_alt: altText,
       caption,
     };
-
+    console.log(data)
     createPost(data)
-      .unwrap().then(_ => navigate('/'))
+      .unwrap().then(res => console.log(res))
   }
 
   return (
@@ -79,7 +88,11 @@ function CreatePost() {
                 return (
                   <div className="relative" key={inx}>
                     {i.type.includes("video") ? (
-                      <video src={mediaUrl} controls className="object-contain" />
+                      <video
+                        src={mediaUrl}
+                        controls width={300}
+                        className="object-contain"
+                      />
                     ) : (
                       <img
                         width={300}
@@ -92,7 +105,9 @@ function CreatePost() {
                       type="button"
                       className="absolute top-0 right-0 bg-red-500 text-white p-2"
                       onClick={() =>
-                        setImagesOrVideos(imagesOrVideos.filter((_, index) => index !== inx))
+                        setImagesOrVideos(
+                          imagesOrVideos.filter((_, index) => index !== inx)
+                        )
                       }
                     >
                       Remove
@@ -189,7 +204,9 @@ function CreatePost() {
         </label>
         <button
           type="submit"
-          className={`font-semibold py-3 px-[20px] bg-purple capitalize w-fit ml-auto rounded-lg ${isLoadingPost ? "opacity-80" : 'opacity-100'}`}
+          className={`font-semibold py-3 px-[20px] bg-purple capitalize w-fit ml-auto rounded-lg ${
+            isLoadingPost ? "opacity-80" : "opacity-100"
+          }`}
         >
           {isLoadingPost ? "sharing post..." : "share post"}
         </button>

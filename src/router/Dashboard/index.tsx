@@ -29,7 +29,7 @@ function DashboardRoutes() {
             <Route path='/reels' element={<Suspense><Reels/></Suspense>}/>
             <Route path='/profile/:username' element={<Suspense><UserProfile/></Suspense>}/>
             <Route path='/my-profile' element={<Suspense><MyProfile/></Suspense>}/>
-            <Route path='/post-page' element={<Suspense><PostPage/></Suspense>}/>
+            <Route path='/post-page/:id' element={<Suspense><PostPage/></Suspense>}/>
             <Route path='/post-modal' element={<Suspense><PostModal/></Suspense>}/>
             <Route path='/saved' element={<Suspense><SavedPost/></Suspense>}/>
             <Route path='/create' element={<Suspense><CreatePost/></Suspense>}/>

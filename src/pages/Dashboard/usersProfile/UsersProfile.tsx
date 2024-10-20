@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useFollowMutation,
   useGetAllPostByUserQuery,
@@ -9,10 +9,11 @@ import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { imageFileTypes } from "../home/Home";
 import { MultiplePostIcon } from "../../../assets/images";
-import NoImg from '../../../assets/images/no-image.jpg'
+import NoImg from "../../../assets/images/no-image.jpg";
 
+export const videoFileTypes = [".mp4", ".webm", ".ogg"];
 function UsersProfile() {
-  const videoFileTypes = [".mp4", ".webm", ".ogg"];
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>();
   const [posts, setPosts] = useState<any[]>([]);
   const [unfollow] = useUnfollowMutation();
@@ -31,16 +32,13 @@ function UsersProfile() {
   useEffect(() => {
     if (data && postByUser && userData) {
       setProfile(data);
-      const updatedPost = postByUser.filter(
-        (_: any, inx: number) => inx !== 11
-      );
-      setPosts(updatedPost);
+
+      setPosts(postByUser);
       setCurrentUserInfo(userData);
     }
   }, [data, postByUser, userData]);
 
-
-  console.log(posts)
+  console.log(posts);
 
   return (
     <section className="text-white h-screen px-[60px] py-[80px] overflow-y-auto bg-black">
@@ -127,21 +125,22 @@ function UsersProfile() {
           <div className="mt-[68px] grid grid-cols-12 gap-4">
             {posts.length ? (
               posts.map((item: any, inx: number) => {
-                const firstPost: string = item?.content[0];
-
+                const firstPost: string = item?.content[0].url;
+                const firstPostType = item?.content[0].type;
                 return (
                   <div
+                    onClick={() => navigate(`/post-page/${item._id}`)}
                     key={inx}
-                    className="col-span-4 rounded-2xl overflow-hidden relative"
+                    className="col-span-4 rounded-2xl z-30 transition-all group overflow-hidden relative"
                   >
                     {item.content.length > 1 && (
-                      <span className="absolute top-6 right-[14px]">
+                      <span className="absolute top-6 right-[14px] z-40">
                         <MultiplePostIcon />
                       </span>
                     )}
 
                     <div
-                      className="absolute flex flex-col justify-end top-0 left-0 right-0 bottom-0"
+                      className="absolute flex flex-col justify-end top-0 left-0 right-0 bottom-0 z-40"
                       style={{
                         background: `linear-gradient(180deg, rgba(23, 23, 23, 0) 0%, #171717 109.15%)`,
                       }}
@@ -153,11 +152,23 @@ function UsersProfile() {
                         </h1>
                       </div>
                     </div>
-                    {imageFileTypes.some((type: string) =>
+                    {firstPostType === "IMAGE" && (
+                      <img
+                        className="w-full group-hover:scale-110 duration-300 h-[315px] object-cover "
+                        src={firstPost}
+                      />
+                    )}
+                    {firstPost === "VIDEO" && (
+                      <video
+                        className="w-full h-[315px] object-cover group-hover:scale-110 duration-300"
+                        src={firstPost}
+                      ></video>
+                    )}
+                    {/* {imageFileTypes.some((type: string) =>
                       firstPost?.includes(type)
                     ) && (
                       <img
-                        className="w-full h-[315px] object-cover"
+                        className="w-full group-hover:scale-110 duration-300 h-[315px] object-cover "
                         src={firstPost}
                       />
                     )}
@@ -165,10 +176,10 @@ function UsersProfile() {
                       firstPost?.includes(type)
                     ) && (
                       <video
-                        className="w-full h-[315px] object-cover"
+                        className="w-full h-[315px] object-cover group-hover:scale-110 duration-300"
                         src={firstPost}
                       ></video>
-                    )}
+                    )} */}
                   </div>
                 );
               })
