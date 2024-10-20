@@ -55,7 +55,10 @@ function CreatePost() {
     };
     console.log(data)
     createPost(data)
-      .unwrap().then(res => console.log(res))
+      .unwrap().then(res => {
+        console.log(res)
+        navigate('/')
+      })
   }
 
   return (
