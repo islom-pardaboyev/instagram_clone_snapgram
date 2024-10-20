@@ -7,7 +7,6 @@ import {
 } from "../../../redux/api/users-api";
 import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { imageFileTypes } from "../home/Home";
 import { MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
 
