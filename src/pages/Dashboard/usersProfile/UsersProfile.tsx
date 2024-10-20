@@ -10,7 +10,6 @@ import { ThreeDots } from "react-loader-spinner";
 import { MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
 
-export const videoFileTypes = [".mp4", ".webm", ".ogg"];
 function UsersProfile() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>();
@@ -124,8 +123,8 @@ function UsersProfile() {
           <div className="mt-[68px] grid grid-cols-12 gap-4">
             {posts.length ? (
               posts.map((item: any, inx: number) => {
-                const firstPost: string = item?.content[0].url;
-                const firstPostType = item?.content[0].type;
+                const firstPost: string = item?.content[0]?.url;
+                const firstPostType = item?.content[0]?.type;
                 return (
                   <div
                     onClick={() => navigate(`/post-page/${item._id}`)}

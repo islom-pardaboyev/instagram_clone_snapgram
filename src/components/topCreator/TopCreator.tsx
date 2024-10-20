@@ -19,7 +19,6 @@ function TopCreator() {
     follow(username);
   };
 
-  console.log(data);
   const handleUnfollow = (username: string): void => {
     unfollow(username);
   };

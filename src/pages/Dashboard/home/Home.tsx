@@ -111,9 +111,7 @@ function Home() {
                       />
                       <div className="mb-[20px] flex flex-col">
                         <h1 className="text-[18px] font-semibold">
-                          {allUser?.find(
-                            (user: any) => user._id === post?.owner
-                          )?.username || currentUserData?.username}
+                          {currentUserData?.username}
                         </h1>
                         <p className="text-[14px] text-light-300 font-bold">
                           {formatDate(post?.createdAt)}
