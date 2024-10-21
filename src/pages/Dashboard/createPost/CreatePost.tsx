@@ -30,20 +30,22 @@ function CreatePost() {
       formData.append("files", img, img.name);
     });
 
-    uploadFiles(formData).unwrap().then((res) => {
-      const urls = res.data.files.flat().map((item: { url: string }) => item.url);
-      const content = urls.map((url: string) => {
-        const isImage = imageFileTypes.some((type: string) => url.includes(type));
-        const type = isImage ? "IMAGE" : "VIDEO";  // Fayl turi aniqlanadi
-        return { url, type };
+    uploadFiles(formData)
+      .unwrap()
+      .then((res) => {
+        const urls = res.files.flat().map((item: { url: string }) => item.url);
+        const content = urls.map((url: string) => {
+          const isImage = imageFileTypes.some((type: string) =>
+            url.includes(type)
+          );
+          const type = isImage ? "IMAGE" : "VIDEO";
+          return { url, type };
+        });
+
+
+        setSaveImages(content)
       });
-      
-      
-      setSaveImages(content)
-      
-    })
   }
-  console.log(saveImages);
 
   function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
@@ -53,10 +55,9 @@ function CreatePost() {
       content_alt: altText,
       caption,
     };
-    console.log(data)
+    console.log(data);
     createPost(data)
-      .unwrap().then(res => {
-        console.log(res)
+      .unwrap().then(() => {
         navigate('/')
       })
   }
@@ -93,7 +94,8 @@ function CreatePost() {
                     {i.type.includes("video") ? (
                       <video
                         src={mediaUrl}
-                        controls width={300}
+                        controls
+                        width={300}
                         className="object-contain"
                       />
                     ) : (

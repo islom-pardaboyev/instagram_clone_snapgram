@@ -36,8 +36,6 @@ function UsersProfile() {
     }
   }, [data, postByUser, userData]);
 
-  console.log(posts);
-
   return (
     <section className="text-white h-screen px-[60px] py-[80px] overflow-y-auto bg-black">
       {profile && posts.length !== undefined ? (
@@ -124,7 +122,7 @@ function UsersProfile() {
             {posts.length ? (
               posts.map((item: any, inx: number) => {
                 const firstPost: string = item?.content[0]?.url;
-                const firstPostType = item?.content[0]?.type;
+                const firstPostType = item?.content[0]?.type ?? NoImg;
                 return (
                   <div
                     onClick={() => navigate(`/post-page/${item._id}`)}
@@ -156,28 +154,12 @@ function UsersProfile() {
                         src={firstPost}
                       />
                     )}
-                    {firstPost === "VIDEO" && (
+                    {firstPostType === "VIDEO" && (
                       <video
                         className="w-full h-[315px] object-cover group-hover:scale-110 duration-300"
                         src={firstPost}
                       ></video>
                     )}
-                    {/* {imageFileTypes.some((type: string) =>
-                      firstPost?.includes(type)
-                    ) && (
-                      <img
-                        className="w-full group-hover:scale-110 duration-300 h-[315px] object-cover "
-                        src={firstPost}
-                      />
-                    )}
-                    {videoFileTypes.some((type: string) =>
-                      firstPost?.includes(type)
-                    ) && (
-                      <video
-                        className="w-full h-[315px] object-cover group-hover:scale-110 duration-300"
-                        src={firstPost}
-                      ></video>
-                    )} */}
                   </div>
                 );
               })

@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
 
 export const imageFileTypes = [
   ".png",
@@ -21,6 +22,7 @@ export const imageFileTypes = [
   ".svg",
 ];
 function Home() {
+  const navigate = useNavigate()
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options: Intl.DateTimeFormatOptions = {
@@ -39,29 +41,26 @@ function Home() {
   const { data: feeds } = useGetFeedQuery(true);
   const { data: currentUserData } = useGetUserQuery(currentUserUsername);
   const { data: allUser } = useGetAllUserQuery(true);
-  const example = currentUserData?.following?.map((followingUser: any) =>
-    allUser?.find((user: any) => user.username === followingUser.username)
-  );
-  console.log(feeds);
 
+  console.log(feeds)
+  
   const UsersCard = (): JSX.Element => {
     return (
       <div className="flex items-center gap-4 overflow-y-auto">
-        {example
-          ?.filter((user: any) => user)
+        {currentUserData.following
           .map((user: any, index: number) => (
             <div
               key={index}
               className="text-center flex flex-col min-w-[86px] items-center"
             >
               <img
-                src={import.meta.env.VITE_API_URL + user.photo}
+                src={NoImg}
                 onError={(e) => (e.currentTarget.src = NoImg)}
                 alt={user.username}
                 className="size-12 rounded-full object-cover"
                 style={{ width: "48px", height: "48px", objectFit: "cover" }}
               />
-              <h1 className="text-xs font-semibold mt-[6px]">
+              <h1 onClick={() => navigate(`/profile/${user.username}`)} className="text-xs cursor-pointer hover:underline font-semibold mt-[6px]">
                 {user.username}
               </h1>
             </div>
@@ -135,7 +134,7 @@ function Home() {
                                 <video controls className="w-full h-[500px] object-contain" src={content?.url}></video>
                               </SwiperSlide>
                             );
-                          } else {
+                          } if (content?.type === 'IMAGE') {
                             return (
                               <SwiperSlide key={contentIndex}>
                                 <img className="w-full h-[500px] object-contain" src={content?.url} />
