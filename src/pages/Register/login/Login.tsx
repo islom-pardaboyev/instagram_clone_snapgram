@@ -89,7 +89,7 @@ function Login() {
           </div>
           <p className="text-center text-light-200  text-sm">
             Don’t have an account?{" "}
-            <Link to={"/"} className="text-primary_500 font-semibold">
+            <Link to={"/sign-up"} className="text-primary_500 font-semibold">
               Sign Up
             </Link>
           </p>

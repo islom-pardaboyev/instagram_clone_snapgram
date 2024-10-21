@@ -7,7 +7,7 @@ import InputComponent from "../../../components/input/InputComponent";
 import { useCreateUserMutation } from "../../../redux/api/users-api";
 
 function SignUp() {
-  const [createUser] = useCreateUserMutation();
+  const [createUser, {isLoading}] = useCreateUserMutation();
   const navigate = useNavigate();
   const SignUpInputsInfo: UserInfos[] = [
     {
@@ -51,7 +51,7 @@ function SignUp() {
     };
 
     createUser(data).then(() => {
-      navigate("/login");
+      navigate("/");
     });
   }
 
@@ -75,7 +75,7 @@ function SignUp() {
               type="submit"
               className="bg-primary_500 capitalize py-[13px] w-full rounded-lg font-semibold"
             >
-              Sign Up
+              {isLoading ? "Loading..." : 'Sign Up'}
             </button>
             <button
               type="button"
@@ -87,7 +87,7 @@ function SignUp() {
           </div>
           <p className="text-center text-light-200  text-sm">
             Don’t have an account?{" "}
-            <Link to={"/login"} className="text-primary_500 font-semibold">
+            <Link to={"/"} className="text-primary_500 font-semibold">
               Log in
             </Link>
           </p>

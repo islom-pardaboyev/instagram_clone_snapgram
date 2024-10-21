@@ -13,15 +13,15 @@ const RegisterRoutes = () => {
       path: "/",
       element: (
         <Suspense>
-          <SignUp />
+          <Login />
         </Suspense>
       ),
     },
     {
-      path: "/login",
+      path: "/sign-up",
       element: (
         <Suspense>
-          <Login />
+          <SignUp />
         </Suspense>
       ),
     },
