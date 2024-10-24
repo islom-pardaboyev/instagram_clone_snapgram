@@ -52,9 +52,9 @@ function UsersProfile() {
               alt={profile.fullName}
             />
             <div className="flex-1">
-              <div className="flex flex-col md:flex-row justify-between items-center">
-                <div className="flex items-center justify-between md:w-full">
-                  <h1 className="font-semibold text-2xl md:text-4xl mb-2 md:mb-0">
+              <div className="flex flex-col md:flex-row gap-10 items-center">
+                <div className="flex items-center">
+                  <h1 className="font-semibold text-2xl line-clamp-1 md:text-4xl mb-2 md:mb-0">
                     {profile.fullName}
                   </h1>
                   {profile && currentUserInfo && profile._id !== currentUserInfo._id && (
@@ -79,13 +79,13 @@ function UsersProfile() {
                   )}
                 </div>
                 {data?._id === currentUserInfo?._id && (
-                  <div
+                  <button
                     onClick={() => navigate(`/edit/${profile.username}`)}
                     className="bg-dark-300 cursor-pointer hover:bg-dark-400 duration-200 py-[10px] px-5 rounded-lg flex items-center gap-[7px]"
                   >
                     <EditIcon />
                     <p className="font-semibold text-sm">Edit Profile</p>
-                  </div>
+                  </button>
                 )}
               </div>
               <p className="text-lg text-light-300 mt-2">@{profile.username}</p>
