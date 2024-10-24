@@ -57,7 +57,7 @@ function PostPage() {
   const { username, id } = useParams();
   const { data: postOwner }: any = useGetUserQuery(username);
   const { data: currentUser } = useGetCurrentUserDatasQuery(true);
-  const { data: allUser } = useGetAllUserQuery(true);
+  const { data: allUser } = useGetAllUserQuery(3000);
   const { data: singlePost }: any = useGetSinglePostQuery({
     username: username ?? "",
     post_id: id ?? "",
