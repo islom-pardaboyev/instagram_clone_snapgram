@@ -21,6 +21,9 @@ export default {
           300: '#7878A3',
           400: '#5C5C7B'
         },
+        blue:{
+          100: '#0095F6'
+        },
         purple: '#877EFF',
         gradient: 'linear-gradient(180deg, #877EFF 0%, #685DFF 46.15%, #3121FF 100%)'
       }

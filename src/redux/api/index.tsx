@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
+import { API } from '../../hook/useEnv';
 
 const baseQuery = async (args: any, api: any, extraOptions: any) => {
   const rawBaseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: API,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("accessToken")
       if (token) {
@@ -27,6 +28,6 @@ const baseQueryWithRetry = retry(baseQuery, { maxRetries: 0 })
 export const api = createApi({
   reducerPath: 'usersApi',
   baseQuery: baseQueryWithRetry,
-  tagTypes: ["User"], 
+  tagTypes: ["User", 'Like'], 
   endpoints: () => ({}),
 })

@@ -2,20 +2,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useFollowMutation,
   useGetAllPostByUserQuery,
+  useGetAllUserQuery,
+  useGetCurrentUserDatasQuery,
   useGetUserQuery,
   useUnfollowMutation,
 } from "../../../redux/api/users-api";
 import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import { MultiplePostIcon } from "../../../assets/images";
+import { EditIcon, MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
+import { API } from "../../../hook/useEnv";
 
 function UsersProfile() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>();
   const [posts, setPosts] = useState<any[]>([]);
-  const [unfollow] = useUnfollowMutation();
-  const [follow] = useFollowMutation();
+  const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
+  const [follow, { isLoading: isFollowLoading }] = useFollowMutation();
   const [currentUserInfo, setCurrentUserInfo] = useState<any>();
 
   const currentUserUsername = window.localStorage.getItem("userData")
@@ -26,64 +29,71 @@ function UsersProfile() {
   const { data } = useGetUserQuery(username);
   const { data: userData } = useGetUserQuery(currentUserUsername);
   const { data: postByUser } = useGetAllPostByUserQuery(username);
-
+  const {data:allusers} = useGetAllUserQuery(true)
+  const {data:currentUserData} = useGetCurrentUserDatasQuery(true)
   useEffect(() => {
     if (data && postByUser && userData) {
       setProfile(data);
-
       setPosts(postByUser);
       setCurrentUserInfo(userData);
     }
   }, [data, postByUser, userData]);
-
-  console.log(posts)
-
+  const bioUser = (allusers?.find((item:any) => item._id === profile?._id)?.bio === "" ? "Don't have a bio" : allusers?.find((item:any) => item._id === profile?._id)?.bio) || currentUserData?.bio
+  
   return (
     <section className="text-white h-screen px-[60px] py-[80px] overflow-y-auto bg-black">
       {profile && posts.length !== undefined ? (
         <main>
-          <header className="flex gap-[30px]">
+          <header className="flex gap-10">
             <img
               className="w-[150px] h-[150px] rounded-full object-cover"
-              src={import.meta.env.VITE_API_URL + profile.photo}
-              onError={(e) => (e.currentTarget.src = NoImg)}
+              src={profile.photo}
+              onError={(e) => (e.currentTarget.src = API + profile.photo)}
               alt={profile.fullName}
             />
             <div>
-              <div className="flex items-center gap-[78px]">
-                <h1 className="font-semibold text-4xl mb-[6.5px]">
-                  {profile.fullName}
-                </h1>
-                {profile &&
-                  currentUserInfo &&
-                  profile._id !== currentUserInfo._id && (
-                    <button
-                      className={
-                        currentUserInfo.following.some(
-                          (user: any) => user._id === profile._id
-                        )
-                          ? "unfollow-btn"
-                          : "follow-btn"
-                      }
-                      onClick={() => {
-                        if (
+              <div className="flex items-center gap-[30px]">
+                <div className="flex items-center gap-[78px]">
+                  <h1 className="font-semibold text-4xl mb-[6.5px]">
+                    {profile.fullName}
+                  </h1>
+                  {profile &&
+                    currentUserInfo &&
+                    profile._id !== currentUserInfo._id && (
+                      <button
+                        className={
                           currentUserInfo.following.some(
                             (user: any) => user._id === profile._id
                           )
-                        ) {
-                          unfollow(profile.username);
-                        } else {
-                          follow(profile.username);
+                            ? "unfollow-btn"
+                            : "follow-btn"
                         }
-                      }}
-                    >
-                      {currentUserInfo.following.some(
-                        (user: any) => user._id === profile._id
-                      )
-                        ? "Unfollow"
-                        : "Follow"}
-                    </button>
-                  )}
+                        onClick={() => {
+                          if (
+                            currentUserInfo.following.some(
+                              (user: any) => user._id === profile._id
+                            )
+                          ) {
+                            unfollow(profile.username);
+                          } else {
+                            follow(profile.username);
+                          }
+                        }}
+                      >
+                        {currentUserInfo.following.some(
+                          (user: any) => user._id === profile._id
+                        )
+                          ? isUnfollowLoading ? 'Unfollowing...' : "Unfollow"
+                          : isFollowLoading ? 'Following...' : "Follow"}
+                      </button>
+                    )}
+                </div>
+                {data?._id === currentUserInfo?._id && (
+                  <div onClick={() => navigate(`/edit/${profile.username}`)} className="bg-dark-300 cursor-pointer hover:bg-dark-400 duration-200 py-[10px] px-5 rounded-lg flex items-center gap-[7px]">
+                    <EditIcon />
+                    <p className="font-semibold text-sm">Edit Profile</p>
+                  </div>
+                )}
               </div>
               <p className="text-lg text-light-300">@{profile.username}</p>
               <div className="mt-[22px] flex items-center gap-10">
@@ -113,13 +123,11 @@ function UsersProfile() {
                 </div>
               </div>
               <p className="mt-[30px]">
-                For Developers, By Developers <br />
-                💻 Web Development & Coding <br />
-                🎥 YouTube - JavaScript Mastery <br />
-                ✉️ Business Inquiries - Email or DM
+                {bioUser}
               </p>
             </div>
           </header>
+          {/* post */}
           <div className="mt-[68px] grid grid-cols-12 gap-4">
             {posts.length ? (
               posts.map((item: any, inx: number) => {
@@ -127,7 +135,9 @@ function UsersProfile() {
                 const firstPostType = item?.content[0]?.type ?? NoImg;
                 return (
                   <div
-                    onClick={() => navigate(`/post-page/${item._id}`)}
+                    onClick={() =>
+                      navigate(`/post-page/${item._id}/${profile.username}`)
+                    }
                     key={inx}
                     className="col-span-4 rounded-2xl z-30 transition-all group overflow-hidden relative"
                   >

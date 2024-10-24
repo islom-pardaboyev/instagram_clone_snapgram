@@ -5,10 +5,12 @@ import { CreateNewUser, UserInfos } from "../../../types";
 import { FormEvent } from "react";
 import InputComponent from "../../../components/input/InputComponent";
 import { useCreateUserMutation } from "../../../redux/api/users-api";
+import { toast } from "react-toastify";
 
 function SignUp() {
-  const [createUser, {isLoading}] = useCreateUserMutation();
+  const [createUser, { isLoading }] = useCreateUserMutation();
   const navigate = useNavigate();
+
   const SignUpInputsInfo: UserInfos[] = [
     {
       id: 1,
@@ -36,13 +38,14 @@ function SignUp() {
     },
   ];
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
     const target = new FormData(e.target as HTMLFormElement);
     const full_name = target.get("full_name") as string;
     const email = target.get("email") as string;
     const username = target.get("username") as string;
     const password = target.get("password") as string;
+
     const data: CreateNewUser = {
       full_name,
       email,
@@ -50,9 +53,18 @@ function SignUp() {
       password,
     };
 
-    createUser(data).then(() => {
+    try {
+      await createUser(data).unwrap();
+      toast.success("Account created successfully!");
       navigate("/");
-    });
+    } catch (err: any) {
+      if (Array.isArray(err.data?.message)) {
+        err.data.message.forEach((msg: string) => toast.error(msg));
+      } else {
+        const errorMessage = err.data?.message;
+        toast.error(errorMessage);
+      }
+    }
   }
 
   return (
@@ -75,7 +87,7 @@ function SignUp() {
               type="submit"
               className="bg-primary_500 capitalize py-[13px] w-full rounded-lg font-semibold"
             >
-              {isLoading ? "Loading..." : 'Sign Up'}
+              {isLoading ? "Loading..." : "Sign Up"}
             </button>
             <button
               type="button"
@@ -86,7 +98,7 @@ function SignUp() {
             </button>
           </div>
           <p className="text-center text-light-200  text-sm">
-            Don’t have an account?{" "}
+            Already have an account?{" "}
             <Link to={"/"} className="text-primary_500 font-semibold">
               Log in
             </Link>

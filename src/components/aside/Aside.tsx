@@ -15,7 +15,7 @@ import LogoPng from "../../assets/images/Logo.png";
 import { Skeleton } from "@chakra-ui/react";
 import { useState } from "react";
 import { Modal } from "antd";
-import NoImg from '../../assets/images/no-image.jpg'
+import { API } from "../../hook/useEnv";
 
 function Aside() {
   const currentUserUsername = window.localStorage.getItem('userData') ? JSON.parse(window.localStorage.getItem('userData') as string).username : null;
@@ -94,12 +94,12 @@ function Aside() {
         <img src={LogoPng} className="w-[171px] h-[36px]" alt="" />
         <div className="flex items-center gap-[10px]">
           {isLoading ? (
-            <Skeleton width="100%" height="40px" />
+            <Skeleton width="40px" className="rounded-full" height="40px" />
           ) : (
             <img
-              src={import.meta.env.VITE_API_URL + data?.photo}
-              onError={(e) => e.currentTarget.src = NoImg}
-              className="w-[40px] h-[40px] rounded-full"
+              src={data?.photo}
+              onError={(e) => e.currentTarget.src = API + data?.photo}
+              className="size-10 object-cover rounded-full"
               alt=""
             />
           )}

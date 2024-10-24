@@ -1,22 +1,11 @@
 import { Skeleton } from "@chakra-ui/react";
 import { AllUsersIcon } from "../../../assets/images";
-import { useFollowMutation, useGetAllUserQuery, useGetUserQuery, useUnfollowMutation } from "../../../redux/api/users-api";
+import { useGetAllUserQuery } from "../../../redux/api/users-api";
 import { User } from "../../../types";
+import UseCard from "../../../components/userCard/UseCard";
 
 function People() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
-  const [follow] = useFollowMutation();
-  const [unfollow] = useUnfollowMutation();
-  const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
-  const username = currentUser?.username || "";
-  const currentUserData = useGetUserQuery(username);
-  const handleFollow = (username: string): void => {
-    follow(username)
-  };
-
-  const handleUnfollow = (username: string): void => {
-    unfollow(username)
-  };
 
   return (
     <section className="h-screen overflow-y-auto bg-black flex flex-col gap-10 text-white px-[60px] py-[80px]">
@@ -34,44 +23,7 @@ function People() {
               />
             ))
           : data.map((user: User) => (
-            <div
-            key={user._id}
-            className="bg-dark-200 col-span-4 flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400"
-          >
-            <img
-              className="size-[54px] rounded-full mx-auto"
-              src={import.meta.env.VITE_API_URL + user.photo}
-              onError={(e) => e.currentTarget.src = user.photo}
-              alt=""
-            />
-            <div className="text-center">
-              <a href={`/profile/${user.username}`} className="text-[14px] font-semibold hover:underline">{user.fullName}</a>
-              <p className="text-[10px] text-light-300 font-medium">
-                Followed by jsmastery
-              </p>
-            </div>
-            {currentUserData.data?.following?.some(
-              (item: any) => item.username === user.username
-            ) ? (
-              <button
-                onClick={() => {
-                  handleUnfollow(user.username);
-                }}
-                className="unfollow-btn capitalize mx-auto"
-              >
-                unfollow
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  handleFollow(user.username);
-                }}
-                className="follow-btn capitalize mx-auto"
-              >
-                follow
-              </button>
-            )}
-          </div>
+          <UseCard user={user}/>
             ))}
       </div>
     </section>

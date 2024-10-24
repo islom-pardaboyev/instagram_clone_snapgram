@@ -24,8 +24,6 @@ function CreatePost() {
 
   function handleUpload() {
     const formData = new FormData();
-    formData.append("location", location);
-    formData.append("content_alt", altText);
     imagesOrVideos.forEach((img) => {
       formData.append("files", img, img.name);
     });
@@ -55,7 +53,6 @@ function CreatePost() {
       content_alt: altText,
       caption,
     };
-    console.log(data);
     createPost(data)
       .unwrap().then(() => {
         navigate('/')

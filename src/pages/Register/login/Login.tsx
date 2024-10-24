@@ -9,10 +9,11 @@ import { Context } from "../../../context/Context";
 import { toast } from "react-toastify";
 
 function Login() {
-  const [loginUser, {isLoading}] = useLoginUserMutation();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const context = useContext(Context);
   const navigate = useNavigate();
+
   const LoginInputInfo: UserInfos[] = [
     {
       id: 1,
@@ -28,8 +29,9 @@ function Login() {
     },
   ];
 
-  function handleFormSubmit(e: FormEvent) {
+  async function handleFormSubmit(e: FormEvent) {
     e.preventDefault();
+
     const target = new FormData(e.target as HTMLFormElement);
     const username = target.get("username") as string;
     const password = target.get("password") as string;
@@ -38,22 +40,26 @@ function Login() {
       username,
       password,
     };
-    window.localStorage.setItem("userData", JSON.stringify(data));
-    loginUser(data)
-      .then(
-        (res) => (
-          window.localStorage.setItem("accessToken", res.data.accessToken),
-          window.localStorage.setItem("refreshToken", res.data.refreshToken),
-          toast.success("Welcome Back"),
-          context?.setToken(true),
-          navigate("/")
-        )
-      )
-      .catch((err) => {
-        toast.error("something went wrong");
-        console.error(err);
-      });
+
+    try {
+      window.localStorage.setItem("userData", JSON.stringify(data));
+      const res = await loginUser(data).unwrap();
+
+      window.localStorage.setItem("accessToken", res?.accessToken);
+      window.localStorage.setItem("refreshToken", res?.refreshToken);
+      toast.success("Welcome Back");
+      context?.setToken(true);
+      navigate("/");
+    } catch (err: any) {
+      if (Array.isArray(err.data?.message)) {
+        err.data.message.forEach((msg: string) => toast.error(msg));
+      } else {
+        const errorMessage = err.data?.message;
+        toast.error(errorMessage);
+      }
+    }
   }
+
   return (
     <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">
       <div className="flex-1 h-screen overflow-y-auto flex items-center justify-center">
@@ -77,7 +83,7 @@ function Login() {
               type="submit"
               className="bg-primary_500 capitalize py-[13px] w-full rounded-lg font-semibold"
             >
-              {isLoading ? "loading..." : "Log In"}
+              {isLoading ? "Loading..." : "Log In"}
             </button>
             <button
               type="button"
