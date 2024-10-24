@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeletePostMutation,
   useGetAllCommentPostQuery,
@@ -27,6 +27,7 @@ import { API } from "../../../hook/useEnv";
 import { formatDate } from "../home/Home";
 import { ThreeDots } from "react-loader-spinner";
 import { FormEvent } from "react";
+import { toast } from "react-toastify";
 
 function PostPage() {
   function timeAgo(dateString: string) {
@@ -52,6 +53,7 @@ function PostPage() {
     }
   }
   const [deletePost] = useDeletePostMutation();
+  const navigate = useNavigate()
   const [postComment] = usePostCommentMutation()
   const [likePost] = useLikePostMutation();
   const { username, id } = useParams();
@@ -139,7 +141,10 @@ function PostPage() {
                   <button>
                     <EditIcon />
                   </button>
-                  <button onClick={() => deletePost(singlePost._id)}>
+                  <button onClick={() => deletePost(singlePost._id).then(() => {
+                    toast.success("Successfully deleted")
+                    navigate("/")
+                  })}>
                     <DeleteIcon />
                   </button>
                 </div>
