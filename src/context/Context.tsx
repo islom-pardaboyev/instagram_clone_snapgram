@@ -11,10 +11,8 @@ export const MainContext = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<boolean>(
     window.localStorage.getItem("accessToken") !== null ? true : false
   );
-
   const checkToken = async () => {
     const token = window.localStorage.getItem("accessToken");
-
     if (token) {
       try {
         const response = await fetch(
@@ -39,11 +37,9 @@ export const MainContext = ({ children }: { children: React.ReactNode }) => {
       setToken(false);
     }
   };
-
   useEffect(() => {
     checkToken();
   }, []);
-
   return (
     <Context.Provider value={{ token, setToken }}>{children}</Context.Provider>
   );
