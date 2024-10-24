@@ -24,7 +24,6 @@ import {
 import { API } from "../../../hook/useEnv";
 import { formatDate } from "../home/Home";
 import { ThreeDots } from "react-loader-spinner";
-import { FiHeart } from "react-icons/fi";
 
 function PostPage() {
   function timeAgo(dateString: string) {

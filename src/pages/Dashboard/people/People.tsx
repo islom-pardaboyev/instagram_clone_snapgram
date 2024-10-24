@@ -2,7 +2,7 @@ import { Skeleton } from "@chakra-ui/react";
 import { AllUsersIcon } from "../../../assets/images";
 import { useGetAllUserQuery } from "../../../redux/api/users-api";
 import { User } from "../../../types";
-import UseCard from "../../../components/userCard/UseCard";
+import UseCard from "../../../components/userCard/UserCard";
 
 function People() {
   const { data = [], isLoading } = useGetAllUserQuery(true);
