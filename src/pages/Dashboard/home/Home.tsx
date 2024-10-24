@@ -68,7 +68,7 @@ function Home() {
 
   return (
     <section className="grid grid-cols-12 h-screen overflow-y-auto text-white">
-      <div className="col-span-7 text-white px-[53px] py-[60px] bg-black">
+      <div className="lg:col-span-7 sm:col-span-12 text-white px-[53px] py-[60px] bg-black">
         <header>
           {currentUserData?.following.length ? (
             <div className="flex overflow-x-auto">

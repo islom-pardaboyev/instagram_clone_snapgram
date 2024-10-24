@@ -80,7 +80,7 @@ function PostPage() {
   return (
     <section className="h-screen overflow-y-auto text-white bg-black px-[31px] py-[80px]">
       {singlePost ? (
-        <div className="grid grid-cols-12 rounded-[30px] place-items-center overflow-hidden bg-dark-200">
+        <div className="grid grid-cols-12 rounded-[30px] overflow-hidden bg-dark-200">
           <div className="col-span-5 h-[582px]">
             <Swiper
               navigation={true}
@@ -93,7 +93,6 @@ function PostPage() {
                   return (
                     <SwiperSlide
                       key={inx}
-                      className="flex items-center h-full justify-center"
                     >
                       <video
                         className="m-auto w-full object-cover"
@@ -104,7 +103,7 @@ function PostPage() {
                   );
                 } else if (item.type === "IMAGE") {
                   return (
-                    <SwiperSlide key={inx}>
+                    <SwiperSlide key={inx} className="flex items-center justify-center">
                       <img
                         className="w-full object-cover"
                         src={item.url}

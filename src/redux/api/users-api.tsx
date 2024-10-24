@@ -25,8 +25,8 @@ export const productApi = api.injectEndpoints({
       providesTags: ["User"],
     }),
     getAllUser: build.query({
-      query: () => ({
-        url: `/api/user/all?limit=3000`,
+      query: (limit) => ({
+        url: `/api/user/all?limit=${limit}`,
       }),
       providesTags: ["User"],
     }),

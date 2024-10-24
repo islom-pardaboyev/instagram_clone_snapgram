@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ContextType {
   token: boolean;
@@ -13,6 +14,7 @@ export const MainContext = ({ children }: { children: React.ReactNode }) => {
   );
   const checkToken = async () => {
     const token = window.localStorage.getItem("accessToken");
+    const navigate = useNavigate()
     if (token) {
       try {
         const response = await fetch(
@@ -32,9 +34,13 @@ export const MainContext = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
         console.error("Tokenni tekshirishda xatolik yuz berdi:", error);
         setToken(false);
+        window.localStorage.clear();
+        navigate('/')
       }
     } else {
       setToken(false);
+      window.localStorage.clear();
+      navigate('/')
     }
   };
   useEffect(() => {

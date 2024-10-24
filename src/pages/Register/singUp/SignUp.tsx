@@ -68,13 +68,13 @@ function SignUp() {
   }
 
   return (
-    <section className="w-screen h-screen bg-dark-100 flex overflow-hidden">
-      <div className="flex-1 h-screen overflow-y-auto flex items-center justify-center">
-        <form onSubmit={handleFormSubmit} className="w-[400px] text-white">
-          <div className="text-center space-y-[12px] mb-[32px]">
+    <section className="w-screen h-screen bg-dark-100 flex flex-col md:flex-row overflow-hidden">
+      <div className="flex-1 h-screen flex items-center justify-center px-4">
+        <form onSubmit={handleFormSubmit} className="w-full max-w-[400px] text-white">
+          <div className="text-center space-y-3 mb-[32px]">
             <h1 className="font-bold text-3xl">Create a new account</h1>
             <p className="text-light-300">
-              To use snapgram, Please enter your details.
+              To use Snapgram, please enter your details.
             </p>
           </div>
           <div className="flex flex-col gap-5">
@@ -97,7 +97,7 @@ function SignUp() {
               <span>Sign up with Google</span>
             </button>
           </div>
-          <p className="text-center text-light-200  text-sm">
+          <p className="text-center text-light-200 text-sm">
             Already have an account?{" "}
             <Link to={"/"} className="text-primary_500 font-semibold">
               Log in
@@ -105,8 +105,8 @@ function SignUp() {
           </p>
         </form>
       </div>
-      <div className="flex-1">
-        <img src={BgImage} className="w-full h-full object-cover" alt="" />
+      <div className="hidden md:flex flex-1">
+        <img src={BgImage} className="w-full h-full object-cover" alt="Background" />
       </div>
     </section>
   );

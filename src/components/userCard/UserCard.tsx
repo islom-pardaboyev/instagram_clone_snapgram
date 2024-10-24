@@ -5,7 +5,7 @@ import {
   useUnfollowMutation,
 } from "../../redux/api/users-api";
 
-function UseCard({ user }: { user: any }) {
+function UseCard({ user, three }: { user: any, three?:boolean }) {
   const [follow, { isLoading: isFollowLoading }] = useFollowMutation();
   const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
   const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
@@ -21,18 +21,18 @@ function UseCard({ user }: { user: any }) {
   return (
     <div
       key={user._id}
-      className="bg-dark-200 col-span-6 flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400"
+      className={`bg-dark-200 ${three ? 'col-span-4' : 'col-span-6' }  flex flex-col gap-[10px] py-6 px-9 rounded-[20px] border border-dark-400`}
     >
       <img
-        className="size-[54px] rounded-full object-cover mx-auto"
+        className={`size-[54px] ${three && 'mb-6'} rounded-full object-cover mx-auto`}
         src={user.photo}
         onError={(e) => (e.currentTarget.src = API + user.photo)}
         alt=""
       />
-      <div className="text-center">
+      <div className={`${three && 'mb-5'} text-center`}>
         <a
           href={`/profile/${user.username}`}
-          className="text-[14px] font-semibold line-clamp-1 hover:underline"
+          className={`${three && 'mb-2'} text-[14px] font-semibold line-clamp-1 hover:underline`}
         >
           {user.fullName}
         </a>
