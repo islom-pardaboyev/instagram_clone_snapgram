@@ -11,9 +11,6 @@ function DashboardRoutes() {
   const UserProfile: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/usersProfile/UsersProfile")
   );
-  const MyProfile: LazyExoticComponent<any> = lazy(
-    () => import("../../pages/Dashboard/myProfile/MyProfile")
-  );
   const PostPage: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/postPage/PostPage")
   );
@@ -59,14 +56,6 @@ function DashboardRoutes() {
             element={
               <Suspense>
                 <UserProfile />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/my-profile"
-            element={
-              <Suspense>
-                <MyProfile />
               </Suspense>
             }
           />
