@@ -1,14 +1,13 @@
 import TopCreator from "../../../components/topCreator/TopCreator";
-import NoImg from "../../../assets/images/no-image.jpg";
 import {
   useGetFeedQuery,
   useGetUserQuery,
 } from "../../../redux/api/users-api";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@chakra-ui/react";
 import PostCard from "../../../components/postCard/PostCard";
+import FollowingUserCard from "../../../components/followingUserCard/FollowingUserCard";
 export const imageFileTypes = [
   ".png",
   ".jpeg",
@@ -32,39 +31,11 @@ export const formatDate = (dateString: string) => {
 };
 
 function Home() {
-  const navigate = useNavigate();
-
   const currentUserUsername = window.localStorage.getItem("userData")
     ? JSON.parse(window.localStorage.getItem("userData") as string).username
     : null;
   const { data: feeds, isLoading } = useGetFeedQuery(true);
   const { data: currentUserData } = useGetUserQuery(currentUserUsername);
-
-  const UsersCard = (): JSX.Element => {
-    return (
-      <header className="flex items-center gap-4 overflow-y-auto">
-        {currentUserData.following.map((user: any, index: number) => (
-          <div
-            key={index}
-            className="text-center flex flex-col min-w-[86px] items-center"
-          >
-            <img
-              src={NoImg}
-              alt={user.username}
-              className="size-12 rounded-full object-cover"
-              style={{ width: "48px", height: "48px", objectFit: "cover" }}
-            />
-            <h1
-              onClick={() => navigate(`/profile/${user.username}`)}
-              className="text-xs cursor-pointer hover:underline font-semibold mt-[6px]"
-            >
-              {user.username}
-            </h1>
-          </div>
-        ))}
-      </header>
-    );
-  };
 
   return (
     <section className="grid grid-cols-12 h-screen overflow-y-auto text-white">
@@ -72,7 +43,7 @@ function Home() {
         <header>
           {currentUserData?.following.length ? (
             <div className="flex overflow-x-auto">
-              <UsersCard />
+              <FollowingUserCard />
             </div>
           ) : (
             <p className="text-center font-bold text-light-300 text-xs">
