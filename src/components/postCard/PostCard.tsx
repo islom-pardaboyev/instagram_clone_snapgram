@@ -13,6 +13,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import {
+  useGetAllCommentByPostIdQuery,
   useGetCurrentUserDatasQuery,
   useLikePostMutation,
   usePostCommentMutation,
@@ -29,10 +30,9 @@ function PostCard({ post }: { post: any }) {
     e.preventDefault();
 
     const target = e.target as HTMLFormElement;
-    const commentInput = target.elements.namedItem(
+    const message = (target.elements.namedItem(
       "comment"
-    ) as HTMLInputElement;
-    const message = commentInput.value;
+    ) as HTMLInputElement).value;
 
     if (message) {
       const data = {
@@ -45,7 +45,7 @@ function PostCard({ post }: { post: any }) {
         .then((_res) => target.reset());
     }
   };
-console.log(post)
+  const {data:commentsByUser} = useGetAllCommentByPostIdQuery(post._id)
   return (
     <div className="px-[29px] py-[36px] border bg-dark-200 rounded-[30px] border-dark-400">
       <header className="mb-[40px] ">
@@ -116,7 +116,7 @@ console.log(post)
               <CommentIcon />
             </span>
             <span className="font-semibold text-sm">
-              {post.comments?.length}
+              {commentsByUser?.length}
             </span>
           </p>
           <p className="flex items-center gap-[6px]">
@@ -140,7 +140,7 @@ console.log(post)
           onError={(e) => (e.currentTarget.src = API + currentUserData?.photo)}
           alt=""
         />
-        <div className="relative bg-dark-300 w-full py-[11px] px-4">
+        <div className="relative bg-dark-300 w-full rounded-lg overflow-hidden py-[11px] px-4">
           <input
             name="comment"
             type="text"

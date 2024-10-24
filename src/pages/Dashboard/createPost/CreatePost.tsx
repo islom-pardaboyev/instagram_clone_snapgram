@@ -11,6 +11,7 @@ import {
 } from "../../../redux/api/users-api";
 import { useNavigate } from "react-router-dom";
 import { imageFileTypes } from "../home/Home";
+import { toast } from "react-toastify";
 
 function CreatePost() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ function CreatePost() {
       .unwrap()
       .then((res) => {
         const urls = res.files.flat().map((item: { url: string }) => item.url);
+        toast.success('Successfully upload')
         const content = urls.map((url: string) => {
           const isImage = imageFileTypes.some((type: string) =>
             url.includes(type)

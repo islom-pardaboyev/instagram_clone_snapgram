@@ -7,6 +7,7 @@ import {
   useGetSinglePostQuery,
   useGetUserQuery,
   useLikePostMutation,
+  usePostCommentMutation,
 } from "../../../redux/api/users-api";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -19,11 +20,13 @@ import {
   LikedIcon,
   LikeIcon,
   ReplyIcon,
+  SendIconYellow,
   ShareIcon,
 } from "../../../assets/images";
 import { API } from "../../../hook/useEnv";
 import { formatDate } from "../home/Home";
 import { ThreeDots } from "react-loader-spinner";
+import { FormEvent } from "react";
 
 function PostPage() {
   function timeAgo(dateString: string) {
@@ -49,6 +52,7 @@ function PostPage() {
     }
   }
   const [deletePost] = useDeletePostMutation();
+  const [postComment] = usePostCommentMutation()
   const [likePost] = useLikePostMutation();
   const { username, id } = useParams();
   const { data: postOwner }: any = useGetUserQuery(username);
@@ -60,12 +64,24 @@ function PostPage() {
   });
   const { data: comment } = useGetAllCommentPostQuery(true);
   const commentPost = comment?.filter((item: any) => item.which_post === id);
-  console.log(singlePost);
+  const sendComment = (e:FormEvent, postId:string) => {
+    e.preventDefault()
+    const target = e.target as HTMLFormElement
+    const message = (target.elements.namedItem('comment') as HTMLInputElement).value
+    if(message) {
+      const data = {
+        postId,
+        body: {message}
+      };
+
+        postComment(data).unwrap().then(() => target.reset())
+    }
+  }
   return (
     <section className="h-screen overflow-y-auto text-white bg-black px-[31px] py-[80px]">
       {singlePost ? (
-        <div className="grid grid-cols-12">
-          <div className="col-span-5">
+        <div className="grid grid-cols-12 rounded-[30px] place-items-center overflow-hidden bg-dark-200">
+          <div className="col-span-5 h-[582px]">
             <Swiper
               navigation={true}
               spaceBetween={10}
@@ -88,12 +104,9 @@ function PostPage() {
                   );
                 } else if (item.type === "IMAGE") {
                   return (
-                    <SwiperSlide
-                      key={inx}
-                      className="flex items-center h-full justify-center"
-                    >
+                    <SwiperSlide key={inx}>
                       <img
-                        className=" w-full  object-cover"
+                        className="w-full object-cover"
                         src={item.url}
                         alt={`Image ${inx}`}
                       />
@@ -109,7 +122,7 @@ function PostPage() {
               <div className="flex items-center gap-3">
                 <img
                   className="w-[50px] h-[50px] rounded-full object-cover"
-                  src={postOwner.photo}
+                  src={postOwner?.photo}
                   onError={(e) => (e.currentTarget.src = API + postOwner.photo)}
                   alt="Post Owner"
                 />
@@ -122,7 +135,7 @@ function PostPage() {
                   </p>
                 </div>
               </div>
-              {postOwner._id === currentUser._id ? (
+              {postOwner?._id === currentUser?._id ? (
                 <div className="flex items-center gap-3">
                   <button>
                     <EditIcon />
@@ -198,7 +211,7 @@ function PostPage() {
               )}
             </div>
 
-            <div className="absolute bottom-0 left-0 w-full flex flex-col gap-10 items-start py-4 px-5">
+            <div className="absolute bottom-0 bg-dark-200 left-0 w-full flex flex-col gap-10 items-start py-4 px-5">
               <div className="flex items-center gap-[30px]">
                 <div className="flex items-center gap-[6px]">
                   <button
@@ -218,29 +231,41 @@ function PostPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-[6px]">
-                  <button
-                    className="text-purple"
-                  >
-                    <CommentIcon/>
+                  <button className="text-purple">
+                    <CommentIcon />
                   </button>
                   <span className="text-sm font-medium">
-                    {commentPost.length}
+                    {commentPost?.length}
                   </span>
                 </div>
                 <div className="flex items-center gap-[6px]">
-                  <button
-                    className="text-purple"
-                  >
-                    <ShareIcon/>
+                  <button className="text-purple">
+                    <ShareIcon />
                   </button>
                   <span className="text-sm font-medium">
                     {singlePost.shares_count}
                   </span>
                 </div>
               </div>
-              <div>
-                <img className="size-10 rounded-full object-cover" src={currentUser.photo} onError={(e) => e.currentTarget.src = API + currentUser.photo} alt="" />
-                <input type="text" />
+              <div className="flex items-center gap-[11px] w-full">
+                <img
+                  className="size-10 rounded-full object-cover"
+                  src={currentUser.photo}
+                  onError={(e) =>
+                    (e.currentTarget.src = API + currentUser.photo)
+                  }
+                  alt=""
+                />
+                <form onSubmit={(e) => sendComment(e, singlePost._id)} className="flex items-center w-full rounded-lg bg-dark-300 py-[11px] px-4 overflow-hidden">
+                  <input
+                    type="text" required name="comment"
+                    className=" placeholder:text-light-400 bg-transparent w-full outline-none"
+                    placeholder="Write your comment..."
+                  />
+                  <button>
+                  <SendIconYellow/>
+                  </button>
+                </form>
               </div>
             </div>
           </div>

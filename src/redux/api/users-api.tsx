@@ -98,12 +98,13 @@ export const productApi = api.injectEndpoints({
         method: 'POST',
         body: data.body,
       }),
-      invalidatesTags: ['User']
+      invalidatesTags: [{type: 'User'}]
     }),
     getAllCommentPost: build.query({
       query:() => ({
-        url: `/api/comment`
+        url: `/api/comment`,
       }),
+      providesTags: [{type: 'User'}]
     }),
     getCurrentUserDatas: build.query({
       query:() => ({
@@ -116,7 +117,12 @@ export const productApi = api.injectEndpoints({
         method: "PUT",
         body
       }),
-      invalidatesTags: [{type: 'User'}]
+    }),
+    getAllCommentByPostId: build.query({
+      query: (postID) => ({
+        url:`/api/comment/post/${postID}`
+      }),
+      providesTags: [{type: 'User'}],
     })
   }),
 });
@@ -138,5 +144,6 @@ export const {
   usePostCommentMutation,
   useGetAllCommentPostQuery,
   useGetCurrentUserDatasQuery,
-  useUpdateUserMutation
+  useUpdateUserMutation,
+  useGetAllCommentByPostIdQuery
 } = productApi;

@@ -8,6 +8,10 @@
     font-family: 'Inter', sans-serif;
 }
 
+::-webkit-scrollbar{
+    display: none;
+}
+
 .follow-btn{
     @apply px-[18px] py-[6px] font-semibold rounded-lg text-xs w-fit  bg-purple
 }
