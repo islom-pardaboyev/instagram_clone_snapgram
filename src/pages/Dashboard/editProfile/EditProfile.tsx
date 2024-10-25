@@ -7,6 +7,7 @@ import {
 } from "../../../redux/api/users-api";
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function EditProfile() {
   const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
@@ -62,7 +63,7 @@ function EditProfile() {
         navigate("/");
         window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch(() => toast.error("Cannot update profile data, please try again later"));
   };
 
   return (
