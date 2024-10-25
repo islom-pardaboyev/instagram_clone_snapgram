@@ -82,12 +82,12 @@ function PostPage() {
   return (
     <section className="h-screen overflow-y-auto text-white bg-black px-[31px] py-[80px]">
       {singlePost ? (
-        <div className="grid grid-cols-12 rounded-[30px] overflow-hidden bg-dark-200">
-          <div className="col-span-5 h-[582px]">
+        <div className="grid grid-cols-12 rounded-[30px] items-center justify-center overflow-hidden bg-dark-200">
+          <div className="col-span-5">
             <Swiper
               navigation={true}
               spaceBetween={10}
-              className="h-full"
+              className=""
               modules={[Navigation]}
             >
               {singlePost.content.map((item: any, inx: number) => {
@@ -97,7 +97,7 @@ function PostPage() {
                       key={inx}
                     >
                       <video
-                        className="m-auto w-full object-cover"
+                        className="w-full object-cover"
                         src={item.url}
                         controls
                       />
@@ -105,9 +105,9 @@ function PostPage() {
                   );
                 } else if (item.type === "IMAGE") {
                   return (
-                    <SwiperSlide key={inx} className="flex items-center justify-center">
+                    <SwiperSlide key={inx} className="">
                       <img
-                        className="w-full object-cover"
+                        className="!w-full !h-full object-cover"
                         src={item.url}
                         alt={`Image ${inx}`}
                       />
@@ -118,11 +118,11 @@ function PostPage() {
               })}
             </Swiper>
           </div>
-          <div className="col-span-7 bg-dark-200 relative py-9 px-7">
+          <div className="col-span-7 bg-dark-200 relative py-9 px-7 h-[700px]">
             <header className="flex mb-5 justify-between items-start">
               <div className="flex items-center gap-3">
                 <img
-                  className="w-[50px] h-[50px] rounded-full object-cover"
+                  className="size-[50px] rounded-full object-cover"
                   src={postOwner?.photo}
                   onError={(e) => (e.currentTarget.src = API + postOwner.photo)}
                   alt="Post Owner"
@@ -154,7 +154,7 @@ function PostPage() {
             <p className="font-semibold">{singlePost?.caption}</p>
             <span className="block w-full h-px bg-dark-400 my-6"></span>
 
-            <div className="flex flex-col gap-6 overflow-y-auto max-h-60">
+            <div className="flex flex-col gap-6 overflow-y-auto max-h-[370px]">
               {commentPost?.length ? (
                 commentPost.map((comment: any, inx: number) => {
                   const userInfo =
@@ -254,7 +254,7 @@ function PostPage() {
               <div className="flex items-center gap-[11px] w-full">
                 <img
                   className="size-10 rounded-full object-cover"
-                  src={currentUser.photo}
+                  src={currentUser?.photo}
                   onError={(e) =>
                     (e.currentTarget.src = API + currentUser.photo)
                   }

@@ -24,3 +24,20 @@ export interface User {
   fullName:string
   photo:string
 }
+
+export interface UserProfile {
+  _id: string;
+  username: string;
+  fullName: string;
+  bio: string;
+  photo: string;
+  followers: Array<{ _id: string }>;
+  following: Array<{ _id: string }>;
+}
+
+export interface Post {
+  _id: string;
+  caption: string;
+  content: Array<{ url: string; type: string }>;
+  content_alt: string;
+}

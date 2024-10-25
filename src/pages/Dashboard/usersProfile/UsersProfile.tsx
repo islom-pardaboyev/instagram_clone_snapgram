@@ -5,30 +5,29 @@ import {
   useGetUserQuery,
   useUnfollowMutation,
   useGetCurrentUserDatasQuery,
+  useGetAllUserQuery,
 } from "../../../redux/api/users-api";
 import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { EditIcon, MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
 import { API } from "../../../hook/useEnv";
+import { Post, UserProfile } from "../../../types";
 
 function UsersProfile() {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState<any>();
-  const [posts, setPosts] = useState<any[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
   const [follow, { isLoading: isFollowLoading }] = useFollowMutation();
-  const [currentUserInfo, setCurrentUserInfo] = useState<any>();
+  const [currentUserInfo, setCurrentUserInfo] = useState<UserProfile | null>(null);
 
-  const currentUserUsername = window.localStorage.getItem("userData")
-    ? JSON.parse(window.localStorage.getItem("userData") as string).username
-    : null;
-
-  const { username } = useParams();
+  const { username } = useParams<{ username: string }>();
   const { data } = useGetUserQuery(username);
-  const { data: userData } = useGetUserQuery(currentUserUsername);
+  const { data: userData } = useGetCurrentUserDatasQuery(true);
   const { data: postByUser } = useGetAllPostByUserQuery(username);
   const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
+  const {data: allUser} = useGetAllUserQuery(3000)
 
   useEffect(() => {
     if (data && postByUser && userData) {
@@ -38,7 +37,8 @@ function UsersProfile() {
     }
   }, [data, postByUser, userData]);
 
-  const bioUser = profile?.bio || currentUserData?.bio || "Don't have a bio";
+  const UserBio = (allUser?.find((item:any) => item._id === profile?._id)?.bio === '' && 'Dont have bio') || currentUserData?.bio
+
 
   return (
     <section className="text-white h-screen px-4 md:px-16 lg:px-[60px] py-[20px] lg:py-[80px] overflow-y-auto bg-black">
@@ -53,26 +53,26 @@ function UsersProfile() {
             />
             <div className="flex-1">
               <div className="flex flex-col md:flex-row gap-10 items-center">
-                <div className="flex items-center">
+                <div className="flex items-center gap-12">
                   <h1 className="font-semibold text-2xl line-clamp-1 md:text-4xl mb-2 md:mb-0">
                     {profile.fullName}
                   </h1>
                   {profile && currentUserInfo && profile._id !== currentUserInfo._id && (
                     <button
                       className={
-                        currentUserInfo.following.some((user: any) => user._id === profile._id)
+                        currentUserInfo.following.some((user) => user._id === profile._id)
                           ? "unfollow-btn"
                           : "follow-btn"
                       }
                       onClick={() => {
-                        if (currentUserInfo.following.some((user: any) => user._id === profile._id)) {
+                        if (currentUserInfo.following.some((user) => user._id === profile._id)) {
                           unfollow(profile.username);
                         } else {
                           follow(profile.username);
                         }
                       }}
                     >
-                      {currentUserInfo.following.some((user: any) => user._id === profile._id)
+                      {currentUserInfo.following.some((user) => user._id === profile._id)
                         ? isUnfollowLoading ? 'Unfollowing...' : "Unfollow"
                         : isFollowLoading ? 'Following...' : "Follow"}
                     </button>
@@ -103,14 +103,13 @@ function UsersProfile() {
                   <span className="text-[18px] font-medium text-light-200">Following</span>
                 </div>
               </div>
-              <p className="mt-[30px]">{bioUser}</p>
+              <p className="mt-[30px]">{UserBio}</p>
             </div>
           </header>
 
-          {/* Posts Section */}
           <div className="mt-[68px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {posts.length ? (
-              posts.map((item: any, inx: number) => {
+              posts.map((item, inx) => {
                 const firstPost: string = item?.content[0]?.url;
                 const firstPostType = item?.content[0]?.type ?? NoImg;
                 return (
@@ -145,7 +144,7 @@ function UsersProfile() {
                       <video
                         className="w-full h-[200px] sm:h-[250px] lg:h-[315px] object-cover group-hover:scale-110 duration-300"
                         src={firstPost}
-                      ></video>
+                      />
                     )}
                   </div>
                 );

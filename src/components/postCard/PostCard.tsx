@@ -48,7 +48,7 @@ function PostCard({ post }: { post: any }) {
   const {data:commentsByUser} = useGetAllCommentByPostIdQuery(post._id)
   return (
     <div className="px-[29px] py-[36px] border bg-dark-200 rounded-[30px] border-dark-400">
-      <header className="mb-[40px] ">
+      <header>
         <div className="flex gap-[10px]">
           <img
             className="size-[50px] rounded-full object-cover"
@@ -65,7 +65,7 @@ function PostCard({ post }: { post: any }) {
         </div>
         <p className="font-semibold">{post?.content_alt}</p>
       </header>
-      <Swiper onClick={() => navigate(`/post-page/${post._id}/${post.owner.username}`)} navigation={true} spaceBetween={10} modules={[Navigation]}>
+      <Swiper className="my-[30px]" onClick={() => navigate(`/post-page/${post._id}/${post.owner.username}`)} navigation={true} spaceBetween={10} modules={[Navigation]}>
         {post.content &&
           post.content?.map((content: any, contentIndex: number) => {
             if (content?.type === "VIDEO") {
@@ -73,7 +73,7 @@ function PostCard({ post }: { post: any }) {
                 <SwiperSlide key={contentIndex}>
                   <video
                     controls
-                    className="w-full h-[500px] object-contain"
+                    className="w-full h-[500px] object-cover"
                     src={content?.url}
                   ></video>
                 </SwiperSlide>
@@ -83,7 +83,7 @@ function PostCard({ post }: { post: any }) {
               return (
                 <SwiperSlide key={contentIndex}>
                   <img
-                    className="w-full h-[500px] object-contain"
+                    className="w-full h-[500px] object-cover"
                     src={content?.url}
                   />
                 </SwiperSlide>

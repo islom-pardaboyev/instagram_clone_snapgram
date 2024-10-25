@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import NoImg from "../../assets/images/no-image.jpg";
 import {
+  useGetAllUserQuery,
   useGetCurrentUserDatasQuery,
 } from "../../redux/api/users-api";
 
 const FollowingUserCard = (): JSX.Element => {
   const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
   const navigate = useNavigate();
+  const {data:allUser} = useGetAllUserQuery(true)
+  console.log(allUser)
 
   return (
     <header className="flex items-center gap-4 overflow-y-auto">
