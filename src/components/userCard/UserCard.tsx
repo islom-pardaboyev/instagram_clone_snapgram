@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { API } from "../../hook/useEnv";
 import {
   useFollowMutation,
@@ -10,6 +11,7 @@ function UseCard({ user, three }: { user: any, three?:boolean }) {
   const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
   const currentUser = JSON.parse(localStorage.getItem("userData") || "{}");
   const username = currentUser?.username || "";
+  const navigate = useNavigate()
   const { data: currentUserData } = useGetUserQuery(username);
   const handleFollow = (username: string): void => {
     follow(username);
@@ -26,16 +28,17 @@ function UseCard({ user, three }: { user: any, three?:boolean }) {
       <img
         className={`size-[54px] ${three && 'mb-6'} rounded-full object-cover mx-auto`}
         src={user.photo}
+        onClick={() => navigate(`/profile/${user.username}`)}
         onError={(e) => (e.currentTarget.src = API + user.photo)}
         alt=""
       />
       <div className={`${three && 'mb-5'} text-center`}>
-        <a
-          href={`/profile/${user.username}`}
+        <div
+          onClick={() => navigate(`/profile/${user.username}`)}
           className={`${three && 'mb-2'} text-[14px] font-semibold line-clamp-1 hover:underline`}
         >
           {user.fullName}
-        </a>
+        </div>
         <p className="text-[10px] text-light-300 font-medium">
           Followed by jsmastery
         </p>

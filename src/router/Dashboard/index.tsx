@@ -14,9 +14,6 @@ function DashboardRoutes() {
   const PostPage: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/postPage/PostPage")
   );
-  const PostModal: LazyExoticComponent<any> = lazy(
-    () => import("../../pages/Dashboard/postModal/PostModal")
-  );
   const CreatePost: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/createPost/CreatePost")
   );
@@ -25,9 +22,6 @@ function DashboardRoutes() {
   );
   const People: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/people/People")
-  );
-  const Following: LazyExoticComponent<any> = lazy(
-    () => import("../../pages/Dashboard/following/Following")
   );
   return (
     <main className="grid grid-cols-12">
@@ -68,14 +62,6 @@ function DashboardRoutes() {
             }
           />
           <Route
-            path="/post-modal"
-            element={
-              <Suspense>
-                <PostModal />
-              </Suspense>
-            }
-          />
-          <Route
             path="/create"
             element={
               <Suspense>
@@ -96,14 +82,6 @@ function DashboardRoutes() {
             element={
               <Suspense>
                 <NotFound />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/following/:username"
-            element={
-              <Suspense>
-                <Following />
               </Suspense>
             }
           />

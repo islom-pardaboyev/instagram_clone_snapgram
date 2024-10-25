@@ -38,8 +38,7 @@ function UsersProfile() {
     }
   }, [data, postByUser, userData]);
 
-  const UserBio = (allUser?.find((item:any) => item._id === profile?._id)?.bio === '' && 'Dont have bio') || currentUserData?.bio
-
+  const UserBio = (allUser?.find((item:any) => item?._id === profile?._id)?.bio === '' ? 'Dont have bio' :allUser?.find((item:any) => item?._id === profile?._id)?.bio) || currentUserData?.bio
 
   return (
     <section className="text-white h-screen px-4 md:px-16 lg:px-[60px] py-[20px] lg:py-[80px] overflow-y-auto bg-black">

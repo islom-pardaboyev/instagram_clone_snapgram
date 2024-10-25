@@ -109,7 +109,8 @@ export const productApi = api.injectEndpoints({
     getCurrentUserDatas: build.query({
       query:() => ({
         url: '/api/user/profile',
-      })
+      }),
+      providesTags: [{ type: 'User' }],
     }),
     updateUser: build.mutation({
       query:(body) => ({
@@ -117,6 +118,7 @@ export const productApi = api.injectEndpoints({
         method: "PUT",
         body
       }),
+      invalidatesTags: [{type: 'User'}]
     }),
     getAllCommentByPostId: build.query({
       query: (postID) => ({
