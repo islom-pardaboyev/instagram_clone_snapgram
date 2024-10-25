@@ -106,7 +106,7 @@ function EditProfile() {
                 type="text"
                 name="full_name"
                 defaultValue={currentUserData.fullName}
-                className="bg-dark-300 outline-none w-full py-4 px-5 font-semibold"
+                className="bg-dark-300 outline-none w-full py-4 rounded-lg px-5 font-semibold"
               />
             </label>
             <label className="flex flex-col gap-3 w-full">
@@ -117,7 +117,7 @@ function EditProfile() {
                   type="text"
                   name="username"
                   defaultValue={currentUserData.username}
-                  className="w-full bg-transparent outline-none"
+                  className="w-full bg-transparent outline-none rounded-lg"
                 />
               </div>
             </label>
@@ -127,7 +127,7 @@ function EditProfile() {
                 name="email"
                 type="text"
                 defaultValue={currentUserData.email}
-                className="bg-dark-300 outline-none w-full py-4 px-5 font-semibold"
+                className="bg-dark-300 outline-none w-full rounded-lg py-4 px-5 font-semibold"
               />
             </label>
             <label className="flex flex-col gap-3 w-full">
@@ -136,7 +136,7 @@ function EditProfile() {
                 name="bio"
                 defaultValue={currentUserData.bio || "Add your bio"}
                 rows={3}
-                className="bg-dark-300 resize-none outline-none w-full py-4 px-5 font-semibold"
+                className="bg-dark-300 resize-none rounded-lg outline-none w-full py-4 px-5 font-semibold"
               ></textarea>
             </label>
             <button className="ml-auto py-3 mt-10 rounded-lg px-5 bg-purple font-semibold">

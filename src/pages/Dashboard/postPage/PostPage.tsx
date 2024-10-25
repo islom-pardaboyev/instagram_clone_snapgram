@@ -28,6 +28,7 @@ import { formatDate } from "../home/Home";
 import { ThreeDots } from "react-loader-spinner";
 import { FormEvent } from "react";
 import { toast } from "react-toastify";
+import Zoom from 'react-medium-image-zoom'
 
 function PostPage() {
   function timeAgo(dateString: string) {
@@ -106,11 +107,14 @@ function PostPage() {
                 } else if (item.type === "IMAGE") {
                   return (
                     <SwiperSlide key={inx} className="">
+                      <Zoom>
+
                       <img
                         className="!w-full !h-full object-cover"
                         src={item.url}
                         alt={`Image ${inx}`}
                       />
+                      </Zoom>
                     </SwiperSlide>
                   );
                 }
@@ -252,7 +256,7 @@ function PostPage() {
                 </div>
               </div>
               <div className="flex items-center gap-[11px] w-full">
-                <img
+              <img
                   className="size-10 rounded-full object-cover"
                   src={currentUser?.photo}
                   onError={(e) =>

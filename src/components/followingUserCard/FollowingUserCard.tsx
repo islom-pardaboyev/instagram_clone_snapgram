@@ -1,26 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import NoImg from "../../assets/images/no-image.jpg";
 import {
   useGetAllUserQuery,
   useGetCurrentUserDatasQuery,
 } from "../../redux/api/users-api";
+import { API } from "../../hook/useEnv";
 
 const FollowingUserCard = (): JSX.Element => {
   const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
   const navigate = useNavigate();
-  const {data:allUser} = useGetAllUserQuery(true)
-  console.log(allUser)
-
+  const { data: allUserData } = useGetAllUserQuery(3000);
+  console.log(allUserData)
   return (
     <header className="flex items-center gap-4 overflow-y-auto">
       {currentUserData?.following?.map((user: any, index: number) => {
+        const anotherDatas = allUserData?.find((item: any) => item.username === user.username);
+        console.log(anotherDatas)
         return (
           <div
             key={index}
             className="text-center flex flex-col min-w-[86px] items-center"
           >
             <img
-              src={NoImg}
+              src={anotherDatas?.photo} 
+              onError={(e) => e.currentTarget.src = API + anotherDatas?.photo}
               alt={user.username}
               className="size-12 rounded-full object-cover"
             />

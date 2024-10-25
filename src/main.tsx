@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { store } from "./redux/index.tsx";
 import { ChakraProvider } from "@chakra-ui/react";
+import 'react-medium-image-zoom/dist/styles.css'
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>

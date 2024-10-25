@@ -13,6 +13,7 @@ import { EditIcon, MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
 import { API } from "../../../hook/useEnv";
 import { Post, UserProfile } from "../../../types";
+import Zoom from 'react-medium-image-zoom'
 
 function UsersProfile() {
   const navigate = useNavigate();
@@ -45,12 +46,15 @@ function UsersProfile() {
       {profile && posts.length !== undefined ? (
         <main>
           <header className="flex flex-col md:flex-row gap-10">
+            <Zoom>
             <img
               className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full object-cover"
               src={profile.photo}
               onError={(e) => (e.currentTarget.src = API + profile.photo)}
               alt={profile.fullName}
             />
+            </Zoom>
+         
             <div className="flex-1">
               <div className="flex flex-col md:flex-row gap-10 items-center">
                 <div className="flex items-center gap-12">
@@ -98,7 +102,7 @@ function UsersProfile() {
                   <p className="text-[20px] text-purple font-bold tracking-[-1px]">{profile.followers.length}</p>
                   <span className="text-[18px] font-medium text-light-200">Followers</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 hover:opacity-70 cursor-pointer" onClick={() => navigate(`/following/${profile.username}`)}>
                   <p className="text-[20px] text-purple font-bold tracking-[-1px]">{profile.following.length}</p>
                   <span className="text-[18px] font-medium text-light-200">Following</span>
                 </div>

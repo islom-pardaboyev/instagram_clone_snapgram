@@ -23,11 +23,11 @@ function DashboardRoutes() {
   const EditProfile: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/editProfile/EditProfile")
   );
-  const Notification: LazyExoticComponent<any> = lazy(
-    () => import("../../pages/Dashboard/notificationPage/NotificationPage")
-  );
   const People: LazyExoticComponent<any> = lazy(
     () => import("../../pages/Dashboard/people/People")
+  );
+  const Following: LazyExoticComponent<any> = lazy(
+    () => import("../../pages/Dashboard/following/Following")
   );
   return (
     <main className="grid grid-cols-12">
@@ -92,18 +92,18 @@ function DashboardRoutes() {
             }
           />
           <Route
-            path="/notifications"
-            element={
-              <Suspense>
-                <Notification />
-              </Suspense>
-            }
-          />
-          <Route
             path="*"
             element={
               <Suspense>
                 <NotFound />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/following/:username"
+            element={
+              <Suspense>
+                <Following />
               </Suspense>
             }
           />
