@@ -36,6 +36,7 @@ export const MainContext = ({ children }: { children: React.ReactNode }) => {
         setToken(false);
         window.localStorage.clear();
         navigate('/')
+        window.location.reload()
       }
     } else {
       setToken(false);

@@ -11,34 +11,42 @@ import { useEffect, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { EditIcon, MultiplePostIcon } from "../../../assets/images";
 import NoImg from "../../../assets/images/no-image.jpg";
-import { API } from "../../../hook/useEnv";
-import { Post, UserProfile } from "../../../types";
-import Zoom from 'react-medium-image-zoom'
+import { Post, User, UserProfile } from "../../../types";
+import Zoom from "react-medium-image-zoom";
 
 function UsersProfile() {
   const navigate = useNavigate();
+  const { username } = useParams<{ username: string }>();
+
+  const { data: profileData } = useGetUserQuery(username);
+  const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
+  const { data: postsData } = useGetAllPostByUserQuery(username);
+  const { data: allUsersData } = useGetAllUserQuery(3000);
+
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
   const [follow, { isLoading: isFollowLoading }] = useFollowMutation();
-  const [currentUserInfo, setCurrentUserInfo] = useState<UserProfile | null>(null);
-
-  const { username } = useParams<{ username: string }>();
-  const { data } = useGetUserQuery(username);
-  const { data: userData } = useGetCurrentUserDatasQuery(true);
-  const { data: postByUser } = useGetAllPostByUserQuery(username);
-  const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
-  const {data: allUser} = useGetAllUserQuery(3000)
+  const [unfollow, { isLoading: isUnfollowLoading }] = useUnfollowMutation();
 
   useEffect(() => {
-    if (data && postByUser && userData) {
-      setProfile(data);
-      setPosts(postByUser);
-      setCurrentUserInfo(userData);
+    if (profileData && postsData && currentUserData) {
+      setProfile(profileData);
+      setPosts(postsData);
     }
-  }, [data, postByUser, userData]);
+  }, [profileData, postsData, currentUserData]);
 
-  const UserBio = (allUser?.find((item:any) => item?._id === profile?._id)?.bio === '' ? 'Dont have bio' :allUser?.find((item:any) => item?._id === profile?._id)?.bio) || currentUserData?.bio
+  const isCurrentUserProfile = profile?._id === currentUserData?._id;
+  const isFollowing = currentUserData?.following?.some((user:User) => user._id === profile?._id);
+
+  const UserBio = allUsersData?.find((user:User) => user?._id === profile?._id)?.bio || currentUserData.bio;
+
+  const handleFollowToggle = () => {
+    if (isFollowing) {
+      unfollow(profile?.username);
+    } else {
+      follow(profile?.username);
+    }
+  };
 
   return (
     <section className="text-white h-screen px-4 md:px-16 lg:px-[60px] py-[20px] lg:py-[80px] overflow-y-auto bg-black">
@@ -46,42 +54,35 @@ function UsersProfile() {
         <main>
           <header className="flex flex-col md:flex-row gap-10">
             <Zoom>
-            <img
-              className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full object-cover"
-              src={profile.photo}
-              onError={(e) => (e.currentTarget.src = API + profile.photo)}
-              alt={profile.fullName}
-            />
+              <img
+                className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] rounded-full object-cover"
+                src={profile.photo}
+                onError={(e) => (e.currentTarget.src = NoImg)}
+                alt={profile.fullName}
+              />
             </Zoom>
-         
             <div className="flex-1">
               <div className="flex flex-col md:flex-row gap-10 items-center">
                 <div className="flex items-center gap-12">
                   <h1 className="font-semibold text-2xl line-clamp-1 md:text-4xl mb-2 md:mb-0">
                     {profile.fullName}
                   </h1>
-                  {profile && currentUserInfo && profile._id !== currentUserInfo._id && (
+                  {!isCurrentUserProfile && (
                     <button
-                      className={
-                        currentUserInfo.following.some((user) => user._id === profile._id)
-                          ? "unfollow-btn"
-                          : "follow-btn"
-                      }
-                      onClick={() => {
-                        if (currentUserInfo.following.some((user) => user._id === profile._id)) {
-                          unfollow(profile.username);
-                        } else {
-                          follow(profile.username);
-                        }
-                      }}
+                      className={isFollowing ? "unfollow-btn" : "follow-btn"}
+                      onClick={handleFollowToggle}
                     >
-                      {currentUserInfo.following.some((user) => user._id === profile._id)
-                        ? isUnfollowLoading ? 'Unfollowing...' : "Unfollow"
-                        : isFollowLoading ? 'Following...' : "Follow"}
+                      {isFollowing
+                        ? isUnfollowLoading
+                          ? "Unfollowing..."
+                          : "Unfollow"
+                        : isFollowLoading
+                        ? "Following..."
+                        : "Follow"}
                     </button>
                   )}
                 </div>
-                {data?._id === currentUserInfo?._id && (
+                {isCurrentUserProfile && (
                   <button
                     onClick={() => navigate(`/edit/${profile.username}`)}
                     className="bg-dark-300 cursor-pointer hover:bg-dark-400 duration-200 py-[10px] px-5 rounded-lg flex items-center gap-[7px]"
@@ -94,16 +95,31 @@ function UsersProfile() {
               <p className="text-lg text-light-300 mt-2">@{profile.username}</p>
               <div className="mt-[22px] flex gap-10 flex-wrap">
                 <div className="flex items-center gap-2">
-                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">{posts.length}</p>
-                  <span className="text-[18px] font-medium text-light-200">Posts</span>
+                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">
+                    {posts.length}
+                  </p>
+                  <span className="text-[18px] font-medium text-light-200">
+                    Posts
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">{profile.followers.length}</p>
-                  <span className="text-[18px] font-medium text-light-200">Followers</span>
+                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">
+                    {profile.followers.length}
+                  </p>
+                  <span className="text-[18px] font-medium text-light-200">
+                    Followers
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 hover:opacity-70 cursor-pointer" onClick={() => navigate(`/following/${profile.username}`)}>
-                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">{profile.following.length}</p>
-                  <span className="text-[18px] font-medium text-light-200">Following</span>
+                <div
+                  className="flex items-center gap-2 hover:opacity-70 cursor-pointer"
+                  onClick={() => navigate(`/following/${profile.username}`)}
+                >
+                  <p className="text-[20px] text-purple font-bold tracking-[-1px]">
+                    {profile.following.length}
+                  </p>
+                  <span className="text-[18px] font-medium text-light-200">
+                    Following
+                  </span>
                 </div>
               </div>
               <p className="mt-[30px]">{UserBio}</p>
@@ -113,12 +129,14 @@ function UsersProfile() {
           <div className="mt-[68px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {posts.length ? (
               posts.map((item, inx) => {
-                const firstPost: string = item?.content[0]?.url;
-                const firstPostType = item?.content[0]?.type ?? NoImg;
+                const firstPost = item.content[0]?.url || NoImg;
+                const firstPostType = item.content[0]?.type || "IMAGE";
                 return (
                   <div
-                    onClick={() => navigate(`/post-page/${item._id}/${profile.username}`)}
                     key={inx}
+                    onClick={() =>
+                      navigate(`/post-page/${item._id}/${profile.username}`)
+                    }
                     className="rounded-2xl z-30 transition-all group overflow-hidden relative"
                   >
                     {item.content.length > 1 && (
@@ -134,7 +152,9 @@ function UsersProfile() {
                     >
                       <div className="p-4">
                         <h1 className="font-bold">{item.caption}</h1>
-                        <h1 className="italic text-xs text-gray-500">{item.content_alt}</h1>
+                        <h1 className="italic text-xs text-gray-500">
+                          {item.content_alt}
+                        </h1>
                       </div>
                     </div>
                     {firstPostType === "IMAGE" && (

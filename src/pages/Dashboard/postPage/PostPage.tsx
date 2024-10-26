@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
+import NoImg from "../../../assets/images/no-image.jpg";
 import {
   useDeletePostMutation,
   useGetAllCommentPostQuery,
@@ -28,7 +29,7 @@ import { formatDate } from "../home/Home";
 import { ThreeDots } from "react-loader-spinner";
 import { FormEvent } from "react";
 import { toast } from "react-toastify";
-import Zoom from 'react-medium-image-zoom'
+import Zoom from "react-medium-image-zoom";
 
 function PostPage() {
   function timeAgo(dateString: string) {
@@ -54,8 +55,8 @@ function PostPage() {
     }
   }
   const [deletePost] = useDeletePostMutation();
-  const navigate = useNavigate()
-  const [postComment] = usePostCommentMutation()
+  const navigate = useNavigate();
+  const [postComment] = usePostCommentMutation();
   const [likePost] = useLikePostMutation();
   const { username, id } = useParams();
   const { data: postOwner }: any = useGetUserQuery(username);
@@ -67,19 +68,22 @@ function PostPage() {
   });
   const { data: comment } = useGetAllCommentPostQuery(true);
   const commentPost = comment?.filter((item: any) => item.which_post === id);
-  const sendComment = (e:FormEvent, postId:string) => {
-    e.preventDefault()
-    const target = e.target as HTMLFormElement
-    const message = (target.elements.namedItem('comment') as HTMLInputElement).value
-    if(message) {
+  const sendComment = (e: FormEvent, postId: string) => {
+    e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    const message = (target.elements.namedItem("comment") as HTMLInputElement)
+      .value;
+    if (message) {
       const data = {
         postId,
-        body: {message}
+        body: { message },
       };
 
-        postComment(data).unwrap().then(() => target.reset())
+      postComment(data)
+        .unwrap()
+        .then(() => target.reset());
     }
-  }
+  };
   return (
     <section className="h-screen overflow-y-auto text-white bg-black px-[31px] py-[80px]">
       {singlePost ? (
@@ -91,35 +95,35 @@ function PostPage() {
               className=""
               modules={[Navigation]}
             >
-              {singlePost.content.map((item: any, inx: number) => {
-                if (item.type === "VIDEO") {
-                  return (
-                    <SwiperSlide
-                      key={inx}
-                    >
-                      <video
-                        className="w-full object-cover"
-                        src={item.url}
-                        controls
-                      />
-                    </SwiperSlide>
-                  );
-                } else if (item.type === "IMAGE") {
-                  return (
-                    <SwiperSlide key={inx} className="">
-                      <Zoom>
-
-                      <img
-                        className="!w-full !h-full object-cover"
-                        src={item.url}
-                        alt={`Image ${inx}`}
-                      />
-                      </Zoom>
-                    </SwiperSlide>
-                  );
-                }
-                return null;
-              })}
+              {singlePost.content.length ? (
+                singlePost.content.map((item: any, inx: number) => {
+                  if (item.type === "VIDEO") {
+                    return (
+                      <SwiperSlide key={inx}>
+                        <video
+                          className="w-full object-cover"
+                          src={item.url}
+                          controls
+                        />
+                      </SwiperSlide>
+                    );
+                  } else if (item.type === "IMAGE") {
+                    return (
+                      <SwiperSlide key={inx} className="">
+                        <Zoom>
+                          <img
+                            className="!w-full !h-full object-cover"
+                            src={item.url}
+                            alt={`Image ${inx}`}
+                          />
+                        </Zoom>
+                      </SwiperSlide>
+                    );
+                  }
+                })
+              ) : (
+                <img src={NoImg} />
+              )}
             </Swiper>
           </div>
           <div className="col-span-7 bg-dark-200 relative py-9 px-7 h-[700px]">
@@ -145,10 +149,14 @@ function PostPage() {
                   <button>
                     <EditIcon />
                   </button>
-                  <button onClick={() => deletePost(singlePost._id).then(() => {
-                    toast.success("Successfully deleted")
-                    navigate("/")
-                  })}>
+                  <button
+                    onClick={() =>
+                      deletePost(singlePost._id).then(() => {
+                        toast.success("Successfully deleted");
+                        navigate("/");
+                      })
+                    }
+                  >
                     <DeleteIcon />
                   </button>
                 </div>
@@ -256,7 +264,7 @@ function PostPage() {
                 </div>
               </div>
               <div className="flex items-center gap-[11px] w-full">
-              <img
+                <img
                   className="size-10 rounded-full object-cover"
                   src={currentUser?.photo}
                   onError={(e) =>
@@ -264,14 +272,19 @@ function PostPage() {
                   }
                   alt=""
                 />
-                <form onSubmit={(e) => sendComment(e, singlePost._id)} className="flex items-center w-full rounded-lg bg-dark-300 py-[11px] px-4 overflow-hidden">
+                <form
+                  onSubmit={(e) => sendComment(e, singlePost._id)}
+                  className="flex items-center w-full rounded-lg bg-dark-300 py-[11px] px-4 overflow-hidden"
+                >
                   <input
-                    type="text" required name="comment"
+                    type="text"
+                    required
+                    name="comment"
                     className=" placeholder:text-light-400 bg-transparent w-full outline-none"
                     placeholder="Write your comment..."
                   />
                   <button>
-                  <SendIconYellow/>
+                    <SendIconYellow />
                   </button>
                 </form>
               </div>
