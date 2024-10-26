@@ -9,12 +9,10 @@ const FollowingUserCard = (): JSX.Element => {
   const { data: currentUserData } = useGetCurrentUserDatasQuery(true);
   const navigate = useNavigate();
   const { data: allUserData } = useGetAllUserQuery(3000);
-  console.log(currentUserData?.following)
   return (
     <header className="flex items-center gap-4 overflow-y-auto">
       {currentUserData?.following?.map((user: any, index: number) => {
-        const anotherDatas = allUserData?.find((item: any) => item._id === user._id);
-        console.log(anotherDatas)
+        const anotherDatas = allUserData?.find((item: any) => item._id === user._id); 
         return (
           <div
             key={index}

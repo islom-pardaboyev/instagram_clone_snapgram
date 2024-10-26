@@ -88,7 +88,7 @@ function PostPage() {
     <section className="h-screen overflow-y-auto text-white bg-black px-[31px] py-[80px]">
       {singlePost ? (
         <div className="grid grid-cols-12 rounded-[30px] items-center justify-center overflow-hidden bg-dark-200">
-          <div className="col-span-5">
+          <div className="col-span-12 lg:col-span-5">
             <Swiper
               navigation={true}
               spaceBetween={10}
@@ -126,7 +126,7 @@ function PostPage() {
               )}
             </Swiper>
           </div>
-          <div className="col-span-7 bg-dark-200 relative py-9 px-7 h-[700px]">
+          <div className="col-span-12 lg:col-span-7 bg-dark-200 relative py-9 px-7 h-[700px]">
             <header className="flex mb-5 justify-between items-start">
               <div className="flex items-center gap-3">
                 <img
