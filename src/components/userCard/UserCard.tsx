@@ -40,7 +40,8 @@ function UseCard({ user, three }: { user: any, three?:boolean }) {
           {user.fullName}
         </div>
         <p className="text-[10px] text-light-300 font-medium">
-          Followed by jsmastery
+          {currentUserData.following.some((item: any) => item._id === user._id) && `Followed by ${currentUserData.username}`}
+          
         </p>
       </div>
       {currentUserData?.following?.length > 0 &&
