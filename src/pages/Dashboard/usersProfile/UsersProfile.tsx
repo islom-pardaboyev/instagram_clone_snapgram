@@ -38,7 +38,8 @@ function UsersProfile() {
   const isCurrentUserProfile = profile?._id === currentUserData?._id;
   const isFollowing = currentUserData?.following?.some((user:User) => user._id === profile?._id);
 
-  const UserBio = (allUsersData?.find((user:User) => user?._id === profile?._id)?.bio ? allUsersData?.find((user:User) => user?._id === profile?._id)?.bio  : 'Dont have a bio') || currentUserData?.bio;
+  const UserBio = (allUsersData?.find((user:User) => user?._id === profile?._id)?.bio ? allUsersData?.find((user:User) => user?._id === profile?._id)?.bio : '') || currentUserData?.bio;
+  console.log(UserBio)
   const handleFollowToggle = () => {
     if (isFollowing) {
       unfollow(profile?.username);
@@ -121,7 +122,7 @@ function UsersProfile() {
                   </span>
                 </div>
               </div>
-              <p className="mt-[30px]">{UserBio}</p>
+              <p className="mt-[30px]">{allUsersData?.find((user:User) => user?._id === profile?._id)?.bio ?? currentUserData?.bio ? currentUserData?.bio : 'dont have a bio'}</p>
             </div>
           </header>
 
